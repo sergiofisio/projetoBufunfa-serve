@@ -1,0 +1,19 @@
+{
+  "name": "projetoBufunfa-serve",
+  "version": "1.0.0",
+  "description": "O Bufunfa é um aplicativo que ajuda jovens a entender, na prática, como administrar as suas decisões financeiras através de uma empresa virtual fictícia, que demonstra como são as responsabilidades da vida financeira adulta.",
+  "main": "index.js",
+  "repository": "https://github.com/sergiofisio/projetoBufunfa-serve.git",
+  "author": "Equipe Bufunfa",
+  "license": "MIT",
+  "devDependencies": {
+    "prisma": "^5.3.1"
+  },
+  "script": {
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js",
+    "migrate": "prisma migrate dev",
+    "pull": "prisma db pull",
+    "push": "prisma db push"
+  }
+}
