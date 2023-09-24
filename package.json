@@ -14,11 +14,12 @@
     "typescript": "^5.2.2"
   },
   "scripts": {
-    "dev": "prisma migrate dev && prisma generate && nodemon src/index.ts",
-    "start": "npx prisma migrate dev && npx prisma generate && ts-node src/index.ts",
-    "migrate": "prisma migrate dev",
-    "pull": "prisma db pull",
-    "push": "prisma db push"
+    "dev": "nodemon src/index.ts",
+    "start": "ts-node src/index.ts",
+    "migrate": "npx prisma migrate dev",
+    "generate": "npx prisma generate",
+    "pull": "npx prisma db pull",
+    "push": "npx prisma db push"
   },
   "dependencies": {
     "@prisma/client": "^5.3.1",

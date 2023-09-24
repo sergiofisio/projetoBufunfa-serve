@@ -10,27 +10,63 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model empresa {
+model companies {
   id        Int   @id @default(autoincrement())
   email     String   @unique
   nome      String
   slogan    String?
-  descricao String?
+  description String?
   cnpj      String
   logo      String?
   background      String?
-  salario   Int?
+  salary   Int?
   ceoId     Int
-  CEO       CEO   @relation(fields: [ceoId], references: [id])
-  senha     String
-  codRecSenha String?
+  CEO       users   @relation(fields: [ceoId], references: [id])
+  password     String
+  recoveryPassword String?
 }
 
-model CEO {
+model users {
   id        Int       @id @default(autoincrement())
-  nome      String
+  name      String
   email     String    @unique
-  senha     String
-  empresa   empresa[]
-  codRecSenha String?
+  cpf       String
+  photo     String?
+  salary    Int?
+  ceo       Boolean   @default(false)
+  employee  Boolean   @default(false)
+  companies   companies[]
+  tasks     task[]
+  expenses  expense[]
+  password     String
+  recoveryPassword String?
+}
+
+model task {
+  id        Int       @id @default(autoincrement())
+  title     String
+  description String?
+  value    Int?
+  status    Boolean   @default(false)
+  employeeId Int
+  employee  users   @relation(fields: [employeeId], references: [id])
+  companyId Int
+  statusEmployee  Boolean   @default(false)
+  statusCeo  Boolean   @default(false)
+}
+
+model statusTask{
+  id        Int       @id @default(autoincrement())
+  status    String
+}
+
+model expense{
+  id        Int       @id @default(autoincrement())
+  title     String
+  description String?
+  value    Int?
+  status    String  @default("a pagar")
+  type    String
+  expensesId Int
+  expenses  users   @relation(fields: [expensesId], references: [id])
 }
