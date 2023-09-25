@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,63 +7,87 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model companies {
-  id        Int   @id @default(autoincrement())
-  email     String   @unique
-  nome      String
-  slogan    String?
-  description String?
-  cnpj      String
-  logo      String?
-  background      String?
-  salary   Int?
-  ceoId     Int
-  CEO       users   @relation(fields: [ceoId], references: [id])
-  password     String
-  recoveryPassword String?
+model Company {
+  id                Int                @id @default(autoincrement())
+  email             String             @unique
+  name              String
+  slogan            String?
+  description       String?
+  cnpj              String
+  logo              String?
+  background        String?
+  salary            Int?
+  ceos              CEO[]
+  employees         Employee[]
+  password          String
+  recoveryPassword  String?
 }
 
-model users {
-  id        Int       @id @default(autoincrement())
-  name      String
-  email     String    @unique
-  cpf       String
-  photo     String?
-  salary    Int?
-  ceo       Boolean   @default(false)
-  employee  Boolean   @default(false)
-  companies   companies[]
-  tasks     task[]
-  expenses  expense[]
-  password     String
-  recoveryPassword String?
+model CEO {
+  id                Int                @id @default(autoincrement())
+  name              String
+  email             String             @unique
+  cpf               String
+  photo             String?
+  companyId         Int?
+  company           Company? @relation(fields: [companyId], references: [id])
+  password          String
+  recoveryPassword  String?
 }
 
-model task {
-  id        Int       @id @default(autoincrement())
-  title     String
-  description String?
-  value    Int?
-  status    Boolean   @default(false)
-  employeeId Int
-  employee  users   @relation(fields: [employeeId], references: [id])
-  companyId Int
-  statusEmployee  Boolean   @default(false)
-  statusCeo  Boolean   @default(false)
+model Employee {
+  id                Int                @id @default(autoincrement())
+  name              String
+  email             String             @unique
+  cpf               String
+  photo             String?
+  salary            Int?
+  companyId         Int?
+  company           Company? @relation(fields: [companyId], references: [id])
+  employeeTasks     EmployeeTasks[]
+  expenses          Expense[]
+  password          String
+  recoveryPassword  String?
 }
 
-model statusTask{
-  id        Int       @id @default(autoincrement())
-  status    String
+model EmployeeTasks {
+  id                Int                @id @default(autoincrement())
+  employeeId        Int?
+  employee          Employee?           @relation(fields: [employeeId], references: [id])
+  taskId            Int
+  tasks             Task               @relation(fields: [taskId], references: [id])
 }
 
-model expense{
-  id        Int       @id @default(autoincrement())
-  title     String
-  description String?
-  value    Int?
-  status    String  @default("a pagar")
-  type    String
-  expensesId Int
-  expenses  users   @relation(fields: [expensesId], references: [id])
+model Task {
+  id                Int                @id @default(autoincrement())
+  title             String
+  description       String?
+  value             Int
+  employeeTasks     EmployeeTasks[]
+  statusTask        StatusTask         @relation(fields: [statusTaskId], references: [id])
+  statusTaskId      Int                @default(1)
+}
+
+model StatusTask {
+  id                Int                @id @default(autoincrement())
+  status            String
+  tasks             Task[]
+}
+
+model Expense {
+  id                Int                @id @default(autoincrement())
+  title             String
+  description       String?
+  value             Int
+  statusExpense     StatusExpense      @relation(fields: [statusExpenseId], references: [id])
+  statusExpenseId   Int                @default(1)
+  type              String
+  employee          Employee           @relation(fields: [employeeId], references: [id])
+  employeeId        Int
+}
+
+model StatusExpense {
+  id                Int                @id @default(autoincrement())
+  status            String
+  expenses          Expense[]
 }
