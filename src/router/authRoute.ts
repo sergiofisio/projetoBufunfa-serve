@@ -1,8 +1,7 @@
 const route = require("express").Router();
-import { Request, Response } from "express";
+const { uploadImg } = require("../controllers/upload");
+const multer = require("../middleware/multer");
 
-route.get("/teste/:table", (req: Request, res: Response) => {
-    res.send("teste token");
-})
+route.post("/upload/:id/:table", multer.single("image"), uploadImg)
 
 module.exports = route;
