@@ -14,8 +14,8 @@ allRoutes.use((req: Request, _: Response, next: NextFunction) => {
 
 allRoutes.use(require("./router/openRoute"));
 
-allRoutes.use(verifyToken)
+// allRoutes.use(verifyToken)
 
-allRoutes.use(require("./router/authRoute"));
+// allRoutes.use(require("./router/authRoute"));
 
 module.exports = allRoutes;
