@@ -1,3 +1,4 @@
+const { login } = require('../controllers/login');
 import { Request, Response } from "express";
 import createCeoController from "../controllers/createCeo";
 
@@ -8,5 +9,6 @@ route.get("/", (req: Request, res: Response) => {
 });
 
 route.post("/register/:table", createCeoController);
+route.post("/login/:table", login)
 
 module.exports = route;
