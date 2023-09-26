@@ -100,6 +100,9 @@ CREATE UNIQUE INDEX "Company_email_key" ON "Company"("email");
 CREATE UNIQUE INDEX "CEO_email_key" ON "CEO"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "CEO_cpf_key" ON "CEO"("cpf");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Employee_email_key" ON "Employee"("email");
 
 -- AddForeignKey
@@ -118,7 +121,7 @@ ALTER TABLE "EmployeeTasks" ADD CONSTRAINT "EmployeeTasks_taskId_fkey" FOREIGN K
 ALTER TABLE "Task" ADD CONSTRAINT "Task_statusTaskId_fkey" FOREIGN KEY ("statusTaskId") REFERENCES "StatusTask"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Expense" ADD CONSTRAINT "Expense_statusExpenseId_fkey" FOREIGN KEY ("statusExpenseId") REFERENCES "StatusExpense"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Expense" ADD CONSTRAINT "Expense_employeeId_fkey" FOREIGN KEY ("employeeId") REFERENCES "Employee"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Expense" ADD CONSTRAINT "Expense_employeeId_fkey" FOREIGN KEY ("employeeId") REFERENCES "Employee"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Expense" ADD CONSTRAINT "Expense_statusExpenseId_fkey" FOREIGN KEY ("statusExpenseId") REFERENCES "StatusExpense"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
