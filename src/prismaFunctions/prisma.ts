@@ -1,16 +1,16 @@
 const { PrismaClient } = require("@prisma/client");
 
-const prisma = new PrismaClient();
+export const prisma = new PrismaClient();
 
 class includes {
-    ceos?: boolean;
-    employees?: boolean;
-    employeeTasks?: {
-        include: {
-            tasks: boolean;
-        }
+  ceos?: boolean;
+  employees?: boolean;
+  employeeTasks?: {
+    include: {
+      tasks: boolean;
     };
-    expenses?: boolean;
+  };
+  expenses?: boolean;
 }
 
 /**
@@ -21,28 +21,32 @@ class includes {
  * @returns O registro encontrado.
  */
 
-export async function findUnique(table: string, data?: any, includes?: includes) {
-    const where = data
-    const Infos = await prisma[table].findUnique({
-        where,
-        include: includes ? includes : undefined,
-    });
-    return Infos;
+export async function findUnique(
+  table: string,
+  data?: any,
+  includes?: includes
+) {
+  const where = data;
+  const Infos = await prisma[table].findUnique({
+    where,
+    include: includes ? includes : undefined,
+  });
+  return Infos;
 }
 
 /**
  * Função para buscar um único registro em uma tabela específica no banco de dados.
- * 
+ *
  * @param table O nome da tabela do banco de dados na qual deseja buscar o registro.
  * @param includes (opcional) Um objeto com opções de inclusão de relacionamentos.
  * @returns Uma Promise que resolve para o registro encontrado.
  */
 
 export async function findMany(table: string, includes?: includes) {
-    const Infos = await prisma[table].findMany({
-        include: includes ? includes : undefined,
-    });
-    return Infos;
+  const Infos = await prisma[table].findMany({
+    include: includes ? includes : undefined,
+  });
+  return Infos;
 }
 
 /**
@@ -54,20 +58,18 @@ export async function findMany(table: string, includes?: includes) {
  */
 
 export async function createOrUpdate(table: string, data: any, id?: number) {
+  console.log(data);
 
-    console.log(data);
+  if (id) {
+    return await prisma[table].update({
+      where: { id },
+      data: { ...data },
+    });
+  }
 
-
-    if (id) {
-        return await prisma[table].update({
-            where: { id },
-            data: { ...data },
-        });
-    }
-
-    return await prisma[table].create({
-        data,
-    })
+  return await prisma[table].create({
+    data,
+  });
 }
 
 /**
@@ -78,8 +80,8 @@ export async function createOrUpdate(table: string, data: any, id?: number) {
  */
 
 export async function deleteOne(table: string, id: number) {
-    const Infos = await prisma[table].delete({
-        where: { id: Number(id) },
-    });
-    return Infos;
+  const Infos = await prisma[table].delete({
+    where: { id: Number(id) },
+  });
+  return Infos;
 }
