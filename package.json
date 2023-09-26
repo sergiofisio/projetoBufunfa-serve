@@ -1,5 +1,5 @@
 {
-  "name": "projetoBufunfa-serve",
+  "name": "projeto-bufunfa-serve",
   "version": "1.0.0",
   "description": "O Bufunfa é um aplicativo que ajuda jovens a entender, na prática, como administrar as suas decisões financeiras através de uma empresa virtual fictícia, que demonstra como são as responsabilidades da vida financeira adulta.",
   "main": "index.js",
