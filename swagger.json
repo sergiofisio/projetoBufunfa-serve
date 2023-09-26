@@ -1,0 +1,83 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Projeto Bufunfa",
+    "version": "1.0.0",
+    "description": "Projeto para ensino de controle financeiro que pode ser usado em escolas ou por uma família."
+  },
+  "tags": [
+    {
+      "name": "bufunfa",
+      "description": "Controle Financeiro"
+    }
+  ],
+  "paths": {
+    "/login/{table}": {
+      "post": {
+        "summary": "Realizar login",
+        "description": "Realiza o login com email, senha e nome da tabela",
+        "parameters": [
+          {
+            "name": "table",
+            "in": "path",
+            "description": "Nome da tabela",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Usuario"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "description": "Token de autenticação"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro de requisição"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Usuario": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": ["email", "password"]
+      }
+    }
+  }
+}
