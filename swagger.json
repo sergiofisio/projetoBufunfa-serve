@@ -1,19 +1,24 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Projeto Bufunfa",
     "version": "1.0.0",
+    "title": "Projeto Bufunfa",
     "description": "Projeto para ensino de controle financeiro que pode ser usado em escolas ou por uma família."
   },
+  "servers": [
+    { "url": "http://localhost:4000", "description": "Servidor local" }
+  ],
   "tags": [
-    {
-      "name": "bufunfa",
-      "description": "Controle Financeiro"
-    }
+    { "name": "Users" },
+    { "name": "Upload" },
+    { "name": "Validations" },
+    { "name": "Tasks" },
+    { "name": "Expenses" }
   ],
   "paths": {
     "/login/{table}": {
       "post": {
+        "tags": ["Users"],
         "summary": "Realizar login",
         "description": "Realiza o login com email, senha e nome da tabela",
         "parameters": [
@@ -22,17 +27,24 @@
             "in": "path",
             "description": "Nome da tabela",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           }
         ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Usuario"
+              "schema": { "$ref": "#/components/schemas/Usuario" },
+              "examples": {
+                "Example Json": {
+                  "value": {
+                    "email": "email@example.com",
+                    "password": "123456"
+                  }
+                },
+                "Example Type": {
+                  "value": { "email": "string", "password": "string" }
+                }
               }
             }
           }
@@ -54,13 +66,70 @@
               }
             }
           },
-          "400": {
-            "description": "Erro de requisição"
-          },
-          "401": {
-            "description": "Não autorizado"
-          }
+          "400": { "description": "Erro de requisição" },
+          "401": { "description": "Não autorizado" }
         }
+      }
+    },
+    "/upload/{id}/{table}": {
+      "post": {
+        "tags": ["Validations"],
+        "summary": "Realizar upload",
+        "description": "Realiza o upload de imagens",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id do usuário",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "table",
+            "in": "path",
+            "description": "Nome da tabela",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": { "type": "string", "format": "binary" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Upload realizado com sucesso"
+                    },
+                    "url": {
+                      "type": "string",
+                      "description": "URL da imagem"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Erro de requisição" },
+          "401": { "description": "Não autorizado" }
+        },
+        "security": [{ "BearerAuth": [] }]
       }
     }
   },
@@ -69,15 +138,12 @@
       "Usuario": {
         "type": "object",
         "properties": {
-          "email": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          }
+          "email": { "type": "string" },
+          "password": { "type": "string" }
         },
         "required": ["email", "password"]
       }
-    }
+    },
+    "securitySchemes": { "BearerAuth": { "type": "http", "scheme": "bearer" } }
   }
 }

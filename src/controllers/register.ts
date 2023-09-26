@@ -4,7 +4,7 @@ import { createOrUpdate, findUnique, prisma } from "../prismaFunctions/prisma";
 import bcrypt from "bcrypt";
 import { handleError } from "../utils/zodErrorHandler";
 
-async function createCeoController(req: Request, res: Response) {
+async function register(req: Request, res: Response) {
   try {
     const { table } = req.params;
     const { name, email, password, cpf } = ceoSchema.parse(req.body);
@@ -38,4 +38,4 @@ async function createCeoController(req: Request, res: Response) {
   }
 }
 
-export default createCeoController;
+export default register;
