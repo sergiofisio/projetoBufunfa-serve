@@ -3,6 +3,8 @@ const { PrismaClient } = require("@prisma/client");
 export const prisma = new PrismaClient();
 
 class includes {
+  id?: number;
+  name?: string;
   ceos?: boolean;
   employees?: boolean;
   employeeTasks?: {
@@ -58,7 +60,6 @@ export async function findMany(table: string, includes?: includes) {
  */
 
 export async function createOrUpdate(table: string, data: any, id?: number) {
-  console.log(data);
 
   if (id) {
     return await prisma[table].update({
@@ -80,8 +81,15 @@ export async function createOrUpdate(table: string, data: any, id?: number) {
  */
 
 export async function deleteOne(table: string, id: number) {
-  const Infos = await prisma[table].delete({
+  return await prisma[table].delete({
     where: { id: Number(id) },
   });
+}
+
+export async function findFirst(table: string, data: any) {
+  const Infos = await prisma[table].findFirst({
+    where: data
+  })
+
   return Infos;
 }

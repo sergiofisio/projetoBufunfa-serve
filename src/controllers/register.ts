@@ -31,7 +31,7 @@ async function register(req: Request, res: Response) {
       password: hashedPassword,
     });
 
-    return res.status(201).json(createCeo);
+    return res.status(201).json({ Mensagem: "Usuário criado com sucesso" });
   } catch (error) {
     const { status, message } = handleError(error);
     return res.status(status).json({ message });

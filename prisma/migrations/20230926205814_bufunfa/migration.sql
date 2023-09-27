@@ -97,6 +97,9 @@ CREATE TABLE "StatusExpense" (
 CREATE UNIQUE INDEX "Company_email_key" ON "Company"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Company_cnpj_key" ON "Company"("cnpj");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "CEO_email_key" ON "CEO"("email");
 
 -- CreateIndex
@@ -104,6 +107,9 @@ CREATE UNIQUE INDEX "CEO_cpf_key" ON "CEO"("cpf");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Employee_email_key" ON "Employee"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Employee_cpf_key" ON "Employee"("cpf");
 
 -- AddForeignKey
 ALTER TABLE "CEO" ADD CONSTRAINT "CEO_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE SET NULL ON UPDATE CASCADE;
