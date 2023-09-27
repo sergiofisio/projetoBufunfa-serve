@@ -87,9 +87,14 @@ export async function deleteOne(table: string, id: number) {
 }
 
 export async function findFirst(table: string, data: any) {
+
+  console.log({ table, data });
+
+
   const Infos = await prisma[table].findFirst({
     where: data
   })
+
 
   return Infos;
 }

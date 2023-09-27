@@ -6,11 +6,11 @@ async function updateTask(req: Request, res: Response): Promise<any> {
     const data = req.body;
 
     try {
-        const findTask = await findUnique("Task", { id: Number(id) });
+        const findTask = await findUnique("task", { id: Number(id) });
 
         if (!findTask) throw new Error("Tarefa não encontrada");
 
-        await createOrUpdate("Task", { ...data }, Number(id));
+        await createOrUpdate("task", { ...data }, Number(id));
 
         res.status(202).json({ mensagem: "Tarefa atualizada com sucesso" });
     } catch (error: any) {

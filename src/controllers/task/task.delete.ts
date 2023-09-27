@@ -9,7 +9,7 @@ const deleteTask = async (req: Request, res: Response): Promise<any> => {
 
         if (!findTask) throw new Error("Tarefa não encontrada");
 
-        await deleteOne("Task", Number(id));
+        await deleteOne("task", Number(id));
 
         res.status(202).json({ mensagem: "Tarefa deletada com sucesso" });
 

@@ -9,10 +9,10 @@ const { uploadImg } = require("../controllers/upload");
 const multer = require("../middleware/multer");
 
 route.post("/upload/:id/:table", multer.single("image"), uploadImg)
-route.post('/createTask/CEO', createTask)
-route.post('/takeTask/Employee/EmployeeTasks/:employeeId/:idTask', takeTask)
-route.put('/createTask/CEO/:id', updateTask)
+route.post('/createTask/ceo', createTask)
+route.post('/takeTask/employee/employeeTasks/:employeeId/:idTask', takeTask)
+route.put('/createTask/ceo/:id', updateTask)
 route.put('/update/:table/:id', update)
-route.delete('/deleteTask/CEO/:id', deleteTask)
+route.delete('/deleteTask/ceo/:id', deleteTask)
 
 module.exports = route;
