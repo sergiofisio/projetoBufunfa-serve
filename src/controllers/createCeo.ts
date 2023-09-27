@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 import { handleError } from "../utils/zodErrorHandler";
 
 async function createCeoController(req: Request, res: Response) {
-  try {
+  try { 
     const { table } = req.params;
     const { name, email, password, cpf } = ceoSchema.parse(req.body);
 
