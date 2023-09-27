@@ -39,7 +39,7 @@
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
     "path": "^0.12.7",
-    "zod": "^3.22.2"
+    "zod": "^3.22.2",
     "swagger-ui-express": "^5.0.0"
   }
 }

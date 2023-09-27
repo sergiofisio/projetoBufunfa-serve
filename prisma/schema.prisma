@@ -7,23 +7,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Company {
+model company {
   id               Int        @id @default(autoincrement())
   email            String     @unique
   name             String
   slogan           String?
   description      String?
-  cnpj             String
+  cnpj             String     @unique
   logo             String?
   background       String?
   salary           Int?
   password         String
   recoveryPassword String?
-  ceos             CEO[]
-  employees        Employee[]
+  ceos             ceo[]
+  employees        employee[]
 }
 
-model CEO {
+model ceo {
   id               Int      @id @default(autoincrement())
   name             String
   email            String   @unique
@@ -32,49 +32,49 @@ model CEO {
   companyId        Int?
   password         String
   recoveryPassword String?
-  company          Company? @relation(fields: [companyId], references: [id])
+  company          company? @relation(fields: [companyId], references: [id])
 }
 
-model Employee {
+model employee {
   id               Int             @id @default(autoincrement())
   name             String
   email            String          @unique
-  cpf              String
+  cpf              String          @unique
   photo            String?
   salary           Int?
   companyId        Int?
   password         String
   recoveryPassword String?
-  company          Company?        @relation(fields: [companyId], references: [id])
-  employeeTasks    EmployeeTasks[]
-  expenses         Expense[]
+  company          company?        @relation(fields: [companyId], references: [id])
+  employeeTasks    employeeTasks[]
+  expenses         expense[]
 }
 
-model EmployeeTasks {
+model employeeTasks {
   id         Int       @id @default(autoincrement())
   employeeId Int?
   taskId     Int
-  employee   Employee? @relation(fields: [employeeId], references: [id])
-  tasks      Task      @relation(fields: [taskId], references: [id])
+  employee   employee? @relation(fields: [employeeId], references: [id])
+  tasks      task      @relation(fields: [taskId], references: [id])
 }
 
-model Task {
+model task {
   id            Int             @id @default(autoincrement())
   title         String
   description   String?
   value         Int
   statusTaskId  Int             @default(1)
-  employeeTasks EmployeeTasks[]
-  statusTask    StatusTask      @relation(fields: [statusTaskId], references: [id])
+  employeeTasks employeeTasks[]
+  statusTask    statusTask      @relation(fields: [statusTaskId], references: [id])
 }
 
-model StatusTask {
+model statusTask {
   id     Int    @id @default(autoincrement())
   status String
-  tasks  Task[]
+  tasks  task[]
 }
 
-model Expense {
+model expense {
   id              Int           @id @default(autoincrement())
   title           String
   description     String?
@@ -82,12 +82,12 @@ model Expense {
   statusExpenseId Int           @default(1)
   type            String
   employeeId      Int
-  employee        Employee      @relation(fields: [employeeId], references: [id])
-  statusExpense   StatusExpense @relation(fields: [statusExpenseId], references: [id])
+  employee        employee      @relation(fields: [employeeId], references: [id])
+  statusExpense   statusExpense @relation(fields: [statusExpenseId], references: [id])
 }
 
-model StatusExpense {
+model statusExpense {
   id       Int       @id @default(autoincrement())
   status   String
-  expenses Expense[]
+  expenses expense[]
 }
