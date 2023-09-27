@@ -4,8 +4,13 @@ import { createOrUpdate, findUnique, prisma } from "../../prismaFunctions/prisma
 import bcrypt from "bcrypt";
 import { handleError } from "../../utils/zodErrorHandler";
 
+<<<<<<< HEAD:src/controllers/createCeo.ts
+async function createCeoController(req: Request, res: Response) {
+  try { 
+=======
 async function register(req: Request, res: Response) {
   try {
+>>>>>>> dev:src/controllers/user/user.register.ts
     const { table } = req.params;
     const { name, email, password, cpf } = ceoSchema.parse(req.body);
 
