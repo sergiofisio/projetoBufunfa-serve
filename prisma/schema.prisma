@@ -7,18 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model ceo {
-  id               Int      @id @default(autoincrement())
-  name             String
-  email            String   @unique
-  cpf              String   @unique
-  photo            String?
-  companyId        Int?
-  password         String
-  recoveryPassword String?
-  company          company? @relation(fields: [companyId], references: [id])
-}
-
 model company {
   id               Int        @id @default(autoincrement())
   email            String     @unique
@@ -31,8 +19,22 @@ model company {
   salary           Int?
   password         String
   recoveryPassword String?
-  ceo              ceo[]
-  employee         employee[]
+  ceos             ceo[]
+  employees        employee[]
+  type             String?    @default("company")
+}
+
+model ceo {
+  id               Int      @id @default(autoincrement())
+  name             String
+  email            String   @unique
+  cpf              String   @unique
+  photo            String?
+  companyId        Int?
+  password         String
+  recoveryPassword String?
+  company          company? @relation(fields: [companyId], references: [id])
+  type             String?   @default("ceo")
 }
 
 model employee {
@@ -47,17 +49,34 @@ model employee {
   recoveryPassword String?
   company          company?        @relation(fields: [companyId], references: [id])
   employeeTasks    employeeTasks[]
-  expense          expense[]
+  expenses         expense[]
+  loans            loan[]
+  type             String?          @default("employee")
+}
+
+model task {
+  id            Int             @id @default(autoincrement())
+  title         String
+  description   String?
+  value         Int
+  employeeTasks employeeTasks[]
 }
 
 model employeeTasks {
-  id           Int        @id @default(autoincrement())
-  employeeId   Int?
-  taskId       Int
-  statusTaskId Int        @default(1)
-  employee     employee?  @relation(fields: [employeeId], references: [id])
-  statusTask   statusTask @relation(fields: [statusTaskId], references: [id])
-  task         task       @relation(fields: [taskId], references: [id])
+  id         Int       @id @default(autoincrement())
+  employeeId Int?
+  taskId     Int
+  employee   employee? @relation(fields: [employeeId], references: [id])
+  tasks      task      @relation(fields: [taskId], references: [id])
+  statusTaskId Int     @default(1)
+  statusTask    statusTask      @relation(fields: [statusTaskId], references: [id])
+}
+
+
+model statusTask {
+  id     Int    @id @default(autoincrement())
+  status String
+  tasks  employeeTasks[]
 }
 
 model expense {
@@ -70,24 +89,20 @@ model expense {
   employeeId      Int
   employee        employee      @relation(fields: [employeeId], references: [id])
   statusExpense   statusExpense @relation(fields: [statusExpenseId], references: [id])
+  recorrent       Boolean       @default(false)
 }
 
 model statusExpense {
-  id      Int       @id @default(autoincrement())
-  status  String
-  expense expense[]
+  id       Int       @id @default(autoincrement())
+  status   String
+  expenses expense[]
 }
 
-model statusTask {
-  id            Int             @id @default(autoincrement())
-  status        String
-  employeeTasks employeeTasks[]
-}
-
-model task {
-  id            Int             @id @default(autoincrement())
-  title         String
-  description   String?
-  value         Int
-  employeeTasks employeeTasks[]
+model loan {
+  id         Int      @id @default(autoincrement())
+  description      String
+  value      Int
+  employeeId Int
+  employee   employee @relation(fields: [employeeId], references: [id])
+  accepted   Boolean  @default(false)
 }
