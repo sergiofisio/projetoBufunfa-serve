@@ -1,4 +1,4 @@
-import { createOrUpdate } from "@src/prismaFunctions/prisma";
+import { createOrUpdate } from "../../prismaFunctions/prisma";
 import { Request, Response } from "express";
 
 const createLoan = async (req: Request, res: Response): Promise<any> => {
@@ -7,6 +7,8 @@ const createLoan = async (req: Request, res: Response): Promise<any> => {
 
     try {
         await createOrUpdate("loan", { ...data, employeeId: Number(id) });
+
+        res.status(201).json({ mensagem: "Emprestimo criado com sucesso" });
     } catch (error: any) {
         return res.status(400).json({ error: error.message });
     }

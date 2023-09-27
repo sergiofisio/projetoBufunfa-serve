@@ -5,13 +5,15 @@ const deleteTask = async (req: Request, res: Response): Promise<any> => {
     const { id } = req.params;
 
     try {
-        const findTask = await findUnique("expense", { id: Number(id) });
+        const expense = await findUnique("expense", { id: Number(id) });
 
-        if (!findTask) throw new Error("Tarefa não encontrada");
+        if (!expense) throw new Error("Tarefa não encontrada");
 
-        await deleteOne("task", Number(id));
+        if (expense.value > 0) throw new Error("A despesa não pode ser deletado, tem certeza que você pagou?");
 
-        res.status(202).json({ mensagem: "Tarefa deletada com sucesso" });
+        await deleteOne("expense", Number(id));
+
+        res.status(202).json({ mensagem: "Despesa deletada com sucesso" });
 
     } catch (error: any) {
         res.status(400).json({ mensagem: error.message });
