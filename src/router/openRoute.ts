@@ -1,6 +1,6 @@
-const { login } = require('../controllers/login');
+const { login } = require('../controllers/user/user.login');
 import { Request, Response } from "express";
-import register from "../controllers/register";
+import register from "../controllers/user/user.register";
 
 const route = require("express").Router();
 

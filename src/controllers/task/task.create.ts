@@ -6,7 +6,6 @@ async function createTask(req: Request, res: Response): Promise<any> {
 
     try {
         const findTask = await findFirst("task", { title: { contains: data.title, } });
-        console.log(findTask);
 
         if (findTask) throw new Error("Tarefa ja foi criada");
 

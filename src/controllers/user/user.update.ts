@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
-import { createOrUpdate, findUnique } from "../prismaFunctions/prisma";
+import { createOrUpdate, findUnique } from "../../prismaFunctions/prisma";
 
 const update = async (req: Request, res: Response): Promise<any> => {
     const data = req.body;
