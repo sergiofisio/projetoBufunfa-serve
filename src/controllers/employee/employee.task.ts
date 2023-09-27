@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { createOrUpdate, deleteOne, findFirst, findUnique } from "../../prismaFunctions/prisma";
-import { create } from "domain";
 
 const takeTask = async (req: Request, res: Response): Promise<any> => {
-    const { taskId, employeeId } = req.params;
+    const { taskId } = req.params;
+    const id = req.user?.id;
 
     try {
         const task = await findUnique('task', { id: Number(taskId) });
@@ -14,7 +14,7 @@ const takeTask = async (req: Request, res: Response): Promise<any> => {
 
         if (taskInTasks) throw new Error("Funcionario ja tem essa tarefa");
 
-        await createOrUpdate('employeeTasks', { taskId: task.id, employeeId: Number(employeeId) });
+        await createOrUpdate('employeeTasks', { taskId: task.id, employeeId: Number(id) });
 
         res.status(200).json({ mensagem: "Tarefa adicionada com sucesso" });
     } catch (error: any) {
