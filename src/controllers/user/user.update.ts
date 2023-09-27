@@ -4,7 +4,8 @@ import { createOrUpdate, findUnique } from "../../prismaFunctions/prisma";
 
 const update = async (req: Request, res: Response): Promise<any> => {
     const data = req.body;
-    const { table, id } = req.params;
+    const { table } = req.params;
+    const id = req.user?.id;
 
     try {
         const user = await findUnique(table, { id: Number(id) });

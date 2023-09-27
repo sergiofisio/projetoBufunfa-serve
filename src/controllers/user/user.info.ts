@@ -2,7 +2,8 @@ import { findUnique } from "../../prismaFunctions/prisma";
 import { Request, Response } from "express";
 
 const getUserInfo = async (req: Request, res: Response): Promise<any> => {
-    const { table, id } = req.params;
+    const { table } = req.params;
+    const id = req.user?.id;
 
     try {
         const includeTasks = table === 'employee' ? { employeeTasks: { include: { tasks: true } } } : {};

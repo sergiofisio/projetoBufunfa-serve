@@ -2,10 +2,10 @@ import { findMany, findUnique } from '../../prismaFunctions/prisma';
 import { Request, Response } from "express";
 
 const getTaskInfo = async (req: Request, res: Response): Promise<any> => {
-    const { id } = req.params;
+    const { taskId } = req.params;
 
     try {
-        const task = await findUnique("task", { id: Number(id) });
+        const task = await findUnique("task", { id: Number(taskId) });
 
         if (!task) throw new Error("Tarefa não encontrada");
 

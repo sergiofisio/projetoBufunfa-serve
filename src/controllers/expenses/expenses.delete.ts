@@ -5,7 +5,7 @@ const deleteTask = async (req: Request, res: Response): Promise<any> => {
     const { id } = req.params;
 
     try {
-        const findTask = await findUnique("task", { id: Number(id) });
+        const findTask = await findUnique("expense", { id: Number(id) });
 
         if (!findTask) throw new Error("Tarefa não encontrada");
 

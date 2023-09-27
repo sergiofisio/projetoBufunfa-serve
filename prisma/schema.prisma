@@ -84,6 +84,7 @@ model expense {
   employeeId      Int
   employee        employee      @relation(fields: [employeeId], references: [id])
   statusExpense   statusExpense @relation(fields: [statusExpenseId], references: [id])
+  recorrent       Boolean       @default(false)
 }
 
 model statusExpense {

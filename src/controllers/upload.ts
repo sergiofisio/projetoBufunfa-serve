@@ -12,7 +12,8 @@ const s3 = new aws.S3({
 });
 
 const uploadImg = async (req: Request, res: Response) => {
-    const { id, table } = req.params
+    const { table } = req.params
+    const id = req.user?.id
 
     const imagem: any = req.file;
 
