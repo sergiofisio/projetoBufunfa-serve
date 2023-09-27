@@ -56,6 +56,8 @@ model employeeTasks {
   taskId     Int
   employee   employee? @relation(fields: [employeeId], references: [id])
   tasks      task      @relation(fields: [taskId], references: [id])
+  statusTaskId Int     @default(1)
+  statusTask    statusTask      @relation(fields: [statusTaskId], references: [id])
 }
 
 model task {
@@ -63,15 +65,13 @@ model task {
   title         String
   description   String?
   value         Int
-  statusTaskId  Int             @default(1)
   employeeTasks employeeTasks[]
-  statusTask    statusTask      @relation(fields: [statusTaskId], references: [id])
 }
 
 model statusTask {
   id     Int    @id @default(autoincrement())
   status String
-  tasks  task[]
+  tasks  employeeTasks[]
 }
 
 model expense {

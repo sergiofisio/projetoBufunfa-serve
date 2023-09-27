@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { ceoSchema } from "../schemas/userSchema";
-import { createOrUpdate, findUnique, prisma } from "../prismaFunctions/prisma";
+import { ceoSchema } from "../../schemas/userSchema";
+import { createOrUpdate, findUnique, prisma } from "../../prismaFunctions/prisma";
 import bcrypt from "bcrypt";
-import { handleError } from "../utils/zodErrorHandler";
+import { handleError } from "../../utils/zodErrorHandler";
 
 async function register(req: Request, res: Response) {
   try {

@@ -1,4 +1,4 @@
-import { createOrUpdate, deleteOne, findMany, findUnique } from "../../prismaFunctions/prisma";
+import { deleteOne, findUnique } from "../../prismaFunctions/prisma";
 import { Request, Response } from "express";
 
 const deleteTask = async (req: Request, res: Response): Promise<any> => {

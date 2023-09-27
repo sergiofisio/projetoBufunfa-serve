@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { findUnique } from "../prismaFunctions/prisma";
+import { findUnique } from "../../prismaFunctions/prisma";
 import { User } from "@src/interface/user";
 
-const { verifyInput } = require("../functions/verify");
+const { verifyInput } = require("../../functions/verify");
 const { compareSync } = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -28,6 +28,7 @@ const login = async (req: CustomRequest, res: Response): Promise<any> => {
 
         if (!passwordIsValid) throw new Error("Email e/ou Senha incorretos");
         delete user.password
+        delete user.recoveryPassword
 
         const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
             expiresIn: "1d",
