@@ -1,7 +1,8 @@
 export interface User {
     id: number;
-    username: string;
+    name: string;
     email: string;
+    type: string;
 }
 
 export interface TokenPayload {

@@ -12,6 +12,8 @@ const update = async (req: Request, res: Response): Promise<any> => {
 
         if (!user) throw new Error("Funcionário não encontrado");
 
+        if (Number(user.id) !== Number(id) && user.type !== table) throw new Error("Você não tem acesso a este recurso")
+
         if (data.password) {
             const hashedPassword = await bcrypt.hash(data.password, 10);
             data.password = hashedPassword;
