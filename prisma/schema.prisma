@@ -21,6 +21,7 @@ model company {
   recoveryPassword String?
   ceos             ceo[]
   employees        employee[]
+  type             String?    @default("company")
 }
 
 model ceo {
@@ -33,6 +34,7 @@ model ceo {
   password         String
   recoveryPassword String?
   company          company? @relation(fields: [companyId], references: [id])
+  type             String?   @default("ceo")
 }
 
 model employee {
@@ -48,6 +50,16 @@ model employee {
   company          company?        @relation(fields: [companyId], references: [id])
   employeeTasks    employeeTasks[]
   expenses         expense[]
+  loans            loan[]
+  type             String?          @default("employee")
+}
+
+model task {
+  id            Int             @id @default(autoincrement())
+  title         String
+  description   String?
+  value         Int
+  employeeTasks employeeTasks[]
 }
 
 model employeeTasks {
@@ -60,13 +72,6 @@ model employeeTasks {
   statusTask    statusTask      @relation(fields: [statusTaskId], references: [id])
 }
 
-model task {
-  id            Int             @id @default(autoincrement())
-  title         String
-  description   String?
-  value         Int
-  employeeTasks employeeTasks[]
-}
 
 model statusTask {
   id     Int    @id @default(autoincrement())
@@ -91,4 +96,13 @@ model statusExpense {
   id       Int       @id @default(autoincrement())
   status   String
   expenses expense[]
+}
+
+model loan {
+  id         Int      @id @default(autoincrement())
+  description      String
+  value      Int
+  employeeId Int
+  employee   employee @relation(fields: [employeeId], references: [id])
+  accepted   Boolean  @default(false)
 }

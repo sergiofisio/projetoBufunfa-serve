@@ -10,6 +10,8 @@ const getUserInfo = async (req: Request, res: Response): Promise<any> => {
 
         const user = await findUnique(table, { id: Number(id) }, includeTasks);
 
+        if (user.type === "employee" && user.type !== table) throw new Error("Você não tem acesso a este recurso")
+
         delete user.password
         delete user.recoveryPassword
 

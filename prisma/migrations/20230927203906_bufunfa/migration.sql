@@ -45,23 +45,23 @@ CREATE TABLE "employee" (
 );
 
 -- CreateTable
-CREATE TABLE "employeeTasks" (
-    "id" SERIAL NOT NULL,
-    "employeeId" INTEGER,
-    "taskId" INTEGER NOT NULL,
-
-    CONSTRAINT "employeeTasks_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "task" (
     "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT,
     "value" INTEGER NOT NULL,
-    "statusTaskId" INTEGER NOT NULL DEFAULT 1,
 
     CONSTRAINT "task_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "employeeTasks" (
+    "id" SERIAL NOT NULL,
+    "employeeId" INTEGER,
+    "taskId" INTEGER NOT NULL,
+    "statusTaskId" INTEGER NOT NULL DEFAULT 1,
+
+    CONSTRAINT "employeeTasks_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -81,6 +81,7 @@ CREATE TABLE "expense" (
     "statusExpenseId" INTEGER NOT NULL DEFAULT 1,
     "type" TEXT NOT NULL,
     "employeeId" INTEGER NOT NULL,
+    "recorrent" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "expense_pkey" PRIMARY KEY ("id")
 );
@@ -91,6 +92,16 @@ CREATE TABLE "statusExpense" (
     "status" TEXT NOT NULL,
 
     CONSTRAINT "statusExpense_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "loan" (
+    "id" SERIAL NOT NULL,
+    "description" TEXT NOT NULL,
+    "value" INTEGER NOT NULL,
+    "employeeId" INTEGER NOT NULL,
+
+    CONSTRAINT "loan_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -124,10 +135,13 @@ ALTER TABLE "employeeTasks" ADD CONSTRAINT "employeeTasks_employeeId_fkey" FOREI
 ALTER TABLE "employeeTasks" ADD CONSTRAINT "employeeTasks_taskId_fkey" FOREIGN KEY ("taskId") REFERENCES "task"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "task" ADD CONSTRAINT "task_statusTaskId_fkey" FOREIGN KEY ("statusTaskId") REFERENCES "statusTask"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "employeeTasks" ADD CONSTRAINT "employeeTasks_statusTaskId_fkey" FOREIGN KEY ("statusTaskId") REFERENCES "statusTask"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "expense" ADD CONSTRAINT "expense_employeeId_fkey" FOREIGN KEY ("employeeId") REFERENCES "employee"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "expense" ADD CONSTRAINT "expense_statusExpenseId_fkey" FOREIGN KEY ("statusExpenseId") REFERENCES "statusExpense"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "loan" ADD CONSTRAINT "loan_employeeId_fkey" FOREIGN KEY ("employeeId") REFERENCES "employee"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
