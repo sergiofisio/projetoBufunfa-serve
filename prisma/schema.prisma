@@ -19,9 +19,9 @@ model company {
   salary           Int?
   password         String
   recoveryPassword String?
+  type             String?    @default("company")
   ceos             ceo[]
   employees        employee[]
-  type             String?    @default("company")
 }
 
 model ceo {
@@ -33,8 +33,8 @@ model ceo {
   companyId        Int?
   password         String
   recoveryPassword String?
+  type             String?  @default("ceo")
   company          company? @relation(fields: [companyId], references: [id])
-  type             String?   @default("ceo")
 }
 
 model employee {
@@ -47,11 +47,14 @@ model employee {
   companyId        Int?
   password         String
   recoveryPassword String?
+  totalExpenses    Int?
+  totalLoans       Int?
+  totalMoney       Int?
+  type             String?         @default("employee")
   company          company?        @relation(fields: [companyId], references: [id])
   employeeTasks    employeeTasks[]
   expenses         expense[]
   loans            loan[]
-  type             String?          @default("employee")
 }
 
 model task {
@@ -63,19 +66,18 @@ model task {
 }
 
 model employeeTasks {
-  id         Int       @id @default(autoincrement())
-  employeeId Int?
-  taskId     Int
-  employee   employee? @relation(fields: [employeeId], references: [id])
-  tasks      task      @relation(fields: [taskId], references: [id])
-  statusTaskId Int     @default(1)
-  statusTask    statusTask      @relation(fields: [statusTaskId], references: [id])
+  id           Int        @id @default(autoincrement())
+  employeeId   Int?
+  taskId       Int
+  statusTaskId Int        @default(1)
+  employee     employee?  @relation(fields: [employeeId], references: [id])
+  statusTask   statusTask @relation(fields: [statusTaskId], references: [id])
+  tasks        task       @relation(fields: [taskId], references: [id])
 }
 
-
 model statusTask {
-  id     Int    @id @default(autoincrement())
-  status String @unique
+  id     Int             @id @default(autoincrement())
+  status String          @unique
   tasks  employeeTasks[]
 }
 
@@ -87,9 +89,9 @@ model expense {
   statusExpenseId Int           @default(1)
   type            String
   employeeId      Int
+  recorrent       Boolean       @default(false)
   employee        employee      @relation(fields: [employeeId], references: [id])
   statusExpense   statusExpense @relation(fields: [statusExpenseId], references: [id])
-  recorrent       Boolean       @default(false)
 }
 
 model statusExpense {
@@ -99,10 +101,10 @@ model statusExpense {
 }
 
 model loan {
-  id         Int      @id @default(autoincrement())
-  description      String
-  value      Int
-  employeeId Int
-  employee   employee @relation(fields: [employeeId], references: [id])
-  accepted   Boolean  @default(false)
+  id          Int      @id @default(autoincrement())
+  description String
+  value       Int
+  employeeId  Int
+  accepted    Boolean  @default(false)
+  employee    employee @relation(fields: [employeeId], references: [id])
 }
