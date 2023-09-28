@@ -7,6 +7,7 @@ class includes {
   name?: string;
   ceos?: boolean;
   employees?: boolean;
+  statusExpenseId?: boolean;
   employeeTasks?: {
     include: {
       tasks: boolean;
@@ -87,6 +88,7 @@ export async function deleteOne(table: string, id: number) {
 }
 
 export async function findFirst(table: string, data: any) {
+
   const Infos = await prisma[table].findFirst({
     where: data
   })

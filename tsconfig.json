@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["node", "@types/babel__core"],
     "target": "es2019",
     "moduleResolution": "node",
     "module": "commonjs",

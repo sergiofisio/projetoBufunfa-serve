@@ -11,6 +11,7 @@ CREATE TABLE "company" (
     "salary" INTEGER,
     "password" TEXT NOT NULL,
     "recoveryPassword" TEXT,
+    "type" TEXT DEFAULT 'company',
 
     CONSTRAINT "company_pkey" PRIMARY KEY ("id")
 );
@@ -25,6 +26,7 @@ CREATE TABLE "ceo" (
     "companyId" INTEGER,
     "password" TEXT NOT NULL,
     "recoveryPassword" TEXT,
+    "type" TEXT DEFAULT 'ceo',
 
     CONSTRAINT "ceo_pkey" PRIMARY KEY ("id")
 );
@@ -40,6 +42,7 @@ CREATE TABLE "employee" (
     "companyId" INTEGER,
     "password" TEXT NOT NULL,
     "recoveryPassword" TEXT,
+    "type" TEXT DEFAULT 'employee',
 
     CONSTRAINT "employee_pkey" PRIMARY KEY ("id")
 );
@@ -100,6 +103,7 @@ CREATE TABLE "loan" (
     "description" TEXT NOT NULL,
     "value" INTEGER NOT NULL,
     "employeeId" INTEGER NOT NULL,
+    "accepted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "loan_pkey" PRIMARY KEY ("id")
 );

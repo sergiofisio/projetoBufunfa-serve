@@ -75,7 +75,7 @@ model employeeTasks {
 
 model statusTask {
   id     Int    @id @default(autoincrement())
-  status String
+  status String @unique
   tasks  employeeTasks[]
 }
 
@@ -94,7 +94,7 @@ model expense {
 
 model statusExpense {
   id       Int       @id @default(autoincrement())
-  status   String
+  status   String    @unique
   expenses expense[]
 }
 

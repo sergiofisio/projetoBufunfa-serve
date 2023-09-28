@@ -23,10 +23,13 @@ const takeTask = async (req: Request, res: Response): Promise<any> => {
 }
 
 const deleteTaskEmployee = async (req: Request, res: Response): Promise<any> => {
-    const { taskId, employeeId } = req.params;
+    const { taskId } = req.params;
+
+    const id = req.user?.id;
+
 
     try {
-        const taskInTasks = await findFirst('employeeTasks', { employeeId: Number(employeeId), taskId: Number(taskId) });
+        const taskInTasks = await findFirst('employeeTasks', { employeeId: Number(id), taskId: Number(taskId) });
 
         if (!taskInTasks) throw new Error("Tarefa não cadastrada para este Funcionario");
 

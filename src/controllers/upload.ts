@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import multer from "multer";
 
 const aws = require("aws-sdk");
 
@@ -10,6 +11,8 @@ const s3 = new aws.S3({
         secretAccessKey: process.env.BACKBLAZE_APPLICATIONKEY,
     },
 });
+
+const upload = multer({ storage: multer.memoryStorage() });
 
 const uploadImg = async (req: Request, res: Response) => {
     const { table } = req.params
@@ -34,4 +37,6 @@ const uploadImg = async (req: Request, res: Response) => {
     }
 };
 
-module.exports = { uploadImg };
+module.exports = {
+    uploadImg
+}

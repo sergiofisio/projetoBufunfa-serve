@@ -1,15 +1,19 @@
 import { deleteOne, findUnique } from "../../prismaFunctions/prisma";
 import { Request, Response } from "express";
 
-const deleteTask = async (req: Request, res: Response): Promise<any> => {
+const deleteExpense = async (req: Request, res: Response): Promise<any> => {
     const { id } = req.params;
+
+    const type = req.user?.type;
 
     try {
         const expense = await findUnique("expense", { id: Number(id) });
 
+        console.log(expense);
+
         if (!expense) throw new Error("Tarefa não encontrada");
 
-        if (expense.value > 0) throw new Error("A despesa não pode ser deletado, tem certeza que você pagou?");
+        if (expense.statusExpenseId === 1 || type !== "ceo") throw new Error("A despesa não pode ser deletado, tem certeza que você pagou?");
 
         await deleteOne("expense", Number(id));
 
@@ -21,4 +25,4 @@ const deleteTask = async (req: Request, res: Response): Promise<any> => {
 
 }
 
-module.exports = { deleteTask }
+module.exports = { deleteExpense }

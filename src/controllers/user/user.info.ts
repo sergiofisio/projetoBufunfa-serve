@@ -6,9 +6,16 @@ const getUserInfo = async (req: Request, res: Response): Promise<any> => {
     const id = req.user?.id;
 
     try {
-        const includeTasks = table === 'employee' ? { employeeTasks: { include: { tasks: true } } } : {};
+        const include = table === 'employee' ? {
+            employeeTasks: {
+                include: {
+                    tasks: true
+                }
+            },
+            expenses: true
+        } : {};
 
-        const user = await findUnique(table, { id: Number(id) }, includeTasks);
+        const user = await findUnique(table, { id: Number(id) }, include);
 
         if (user.type === "employee" && user.type !== table) throw new Error("Você não tem acesso a este recurso")
 
@@ -20,6 +27,8 @@ const getUserInfo = async (req: Request, res: Response): Promise<any> => {
         res.status(200).json({ [table]: user });
 
     } catch (error: any) {
+        console.log(error);
+
         res.status(400).json({ error: error.message });
     }
 }
