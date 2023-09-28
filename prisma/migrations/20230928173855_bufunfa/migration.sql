@@ -42,6 +42,9 @@ CREATE TABLE "employee" (
     "companyId" INTEGER,
     "password" TEXT NOT NULL,
     "recoveryPassword" TEXT,
+    "totalExpenses" INTEGER,
+    "totalLoans" INTEGER,
+    "totalMoney" INTEGER,
     "type" TEXT DEFAULT 'employee',
 
     CONSTRAINT "employee_pkey" PRIMARY KEY ("id")
@@ -125,6 +128,12 @@ CREATE UNIQUE INDEX "employee_email_key" ON "employee"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "employee_cpf_key" ON "employee"("cpf");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "statusTask_status_key" ON "statusTask"("status");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "statusExpense_status_key" ON "statusExpense"("status");
 
 -- AddForeignKey
 ALTER TABLE "ceo" ADD CONSTRAINT "ceo_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "company"("id") ON DELETE SET NULL ON UPDATE CASCADE;

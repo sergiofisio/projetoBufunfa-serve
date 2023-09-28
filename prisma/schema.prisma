@@ -51,6 +51,9 @@ model employee {
   employeeTasks    employeeTasks[]
   expenses         expense[]
   loans            loan[]
+  totalExpenses    Int?
+  totalLoans       Int?
+  totalMoney       Int?
   type             String?          @default("employee")
 }
 

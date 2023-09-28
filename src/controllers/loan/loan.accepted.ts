@@ -7,7 +7,7 @@ const acceptLoan = async (req: Request, res: Response): Promise<any> => {
     const type = req.user?.type
 
     try {
-        if (type !== "ceo") throw new Error("Você não a esta funcionalidade");
+        if (type !== "ceo") throw new Error("Você não tem acesso a esta funcionalidade");
 
         await createOrUpdate("loan", { ...data }, Number(id));
 
