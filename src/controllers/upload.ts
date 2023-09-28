@@ -12,8 +12,6 @@ const s3 = new aws.S3({
     },
 });
 
-const upload = multer({ storage: multer.memoryStorage() });
-
 const uploadImg = async (req: Request, res: Response) => {
     const { table } = req.params
     const id = req.user?.id
@@ -32,7 +30,6 @@ const uploadImg = async (req: Request, res: Response) => {
             .promise();
         res.json({ fileUpload });
     } catch (error) {
-        console.log(error);
         res.status(500).json({ error: "Erro ao fazer o upload do arquivo" });
     }
 };

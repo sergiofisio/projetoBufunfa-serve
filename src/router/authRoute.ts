@@ -16,7 +16,7 @@ const multer = require("../middleware/multer");
 route.get("/userInfo/:table", getUserInfo)
 route.get('/task/:table/:taskId', getTaskInfo)
 route.get('/tasks/:table', getAllTasks)
-// route.post("/upload/:table", multer.single("image"), uploadImg)
+route.post("/upload/:table", multer.single("image"), uploadImg)
 route.post('/createTask/ceo', createTask)
 route.post('/createExpense/:table', createExpense)
 route.post('/takeTask/employee/employeeTasks/:taskId', takeTask)
