@@ -6,6 +6,9 @@
   "repository": "https://github.com/sergiofisio/projetoBufunfa-serve.git",
   "author": "Equipe Bufunfa",
   "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "devDependencies": {
     "@types/jest": "^29.5.5",
     "@types/multer": "^1.4.8",
