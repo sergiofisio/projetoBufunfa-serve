@@ -22,7 +22,7 @@
   },
   "scripts": {
     "dev": "nodemon src/index.ts",
-    "install": "yarn && yarn migrate && yarn generate && yarn push && yarn seed && yarn build",
+    "install": "yarn install && yarn prisma && yarn seed && yarn build",
     "start": "node dist/index.js",
     "build": "tsc",
     "prisma": "npm run migrate dev && npm run generate && npm run push",
