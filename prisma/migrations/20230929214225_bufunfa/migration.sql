@@ -9,9 +9,6 @@ CREATE TABLE "company" (
     "logo" TEXT,
     "background" TEXT,
     "salary" INTEGER,
-    "password" TEXT NOT NULL,
-    "recoveryPassword" TEXT,
-    "type" TEXT DEFAULT 'company',
 
     CONSTRAINT "company_pkey" PRIMARY KEY ("id")
 );
@@ -42,9 +39,6 @@ CREATE TABLE "employee" (
     "companyId" INTEGER,
     "password" TEXT NOT NULL,
     "recoveryPassword" TEXT,
-    "totalExpenses" INTEGER,
-    "totalLoans" INTEGER,
-    "totalMoney" INTEGER,
     "type" TEXT DEFAULT 'employee',
 
     CONSTRAINT "employee_pkey" PRIMARY KEY ("id")
@@ -56,6 +50,7 @@ CREATE TABLE "task" (
     "title" TEXT NOT NULL,
     "description" TEXT,
     "value" INTEGER NOT NULL,
+    "companyId" INTEGER,
 
     CONSTRAINT "task_pkey" PRIMARY KEY ("id")
 );
@@ -84,12 +79,20 @@ CREATE TABLE "expense" (
     "title" TEXT NOT NULL,
     "description" TEXT,
     "value" INTEGER NOT NULL,
-    "statusExpenseId" INTEGER NOT NULL DEFAULT 1,
     "type" TEXT NOT NULL,
-    "employeeId" INTEGER NOT NULL,
-    "recorrent" BOOLEAN NOT NULL DEFAULT false,
+    "companyId" INTEGER,
 
     CONSTRAINT "expense_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "employeeExpenses" (
+    "id" SERIAL NOT NULL,
+    "employeeId" INTEGER,
+    "expenseId" INTEGER NOT NULL,
+    "statusExpenseId" INTEGER NOT NULL DEFAULT 1,
+
+    CONSTRAINT "employeeExpenses_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -104,6 +107,8 @@ CREATE TABLE "statusExpense" (
 CREATE TABLE "loan" (
     "id" SERIAL NOT NULL,
     "description" TEXT NOT NULL,
+    "dueDate" INTEGER NOT NULL,
+    "interestRate" INTEGER NOT NULL,
     "value" INTEGER NOT NULL,
     "employeeId" INTEGER NOT NULL,
     "accepted" BOOLEAN NOT NULL DEFAULT false,
@@ -142,6 +147,9 @@ ALTER TABLE "ceo" ADD CONSTRAINT "ceo_companyId_fkey" FOREIGN KEY ("companyId") 
 ALTER TABLE "employee" ADD CONSTRAINT "employee_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "company"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "task" ADD CONSTRAINT "task_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "company"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "employeeTasks" ADD CONSTRAINT "employeeTasks_employeeId_fkey" FOREIGN KEY ("employeeId") REFERENCES "employee"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -151,10 +159,16 @@ ALTER TABLE "employeeTasks" ADD CONSTRAINT "employeeTasks_taskId_fkey" FOREIGN K
 ALTER TABLE "employeeTasks" ADD CONSTRAINT "employeeTasks_statusTaskId_fkey" FOREIGN KEY ("statusTaskId") REFERENCES "statusTask"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "expense" ADD CONSTRAINT "expense_employeeId_fkey" FOREIGN KEY ("employeeId") REFERENCES "employee"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "expense" ADD CONSTRAINT "expense_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "company"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "expense" ADD CONSTRAINT "expense_statusExpenseId_fkey" FOREIGN KEY ("statusExpenseId") REFERENCES "statusExpense"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "employeeExpenses" ADD CONSTRAINT "employeeExpenses_employeeId_fkey" FOREIGN KEY ("employeeId") REFERENCES "employee"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "employeeExpenses" ADD CONSTRAINT "employeeExpenses_expenseId_fkey" FOREIGN KEY ("expenseId") REFERENCES "expense"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "employeeExpenses" ADD CONSTRAINT "employeeExpenses_statusExpenseId_fkey" FOREIGN KEY ("statusExpenseId") REFERENCES "statusExpense"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "loan" ADD CONSTRAINT "loan_employeeId_fkey" FOREIGN KEY ("employeeId") REFERENCES "employee"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -10,7 +10,6 @@ allRoutes.use(express.json());
 
 allRoutes.use((req: Request, _: Response, next: NextFunction) => {
   const url = req.protocol + "://" + req.get("host") + req.originalUrl;
-  // console.log({ url, metodo: req.method });
   next();
 });
 allRoutes.use('/swaggerDocs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
