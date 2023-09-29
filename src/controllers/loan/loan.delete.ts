@@ -6,8 +6,6 @@ const deleteLoan = async (req: Request, res: Response): Promise<any> => {
     const type = req.user?.type
 
     try {
-        if (type !== "ceo") throw new Error("Você não tem acesso a esta funcionalidade");
-
         const loan = await findUnique("loan", { id: Number(id) });
 
         if (loan.value > 0 && type !== 'ceo') throw new Error("O emprestimo não pode ser deletado, tem certeza que você terminou de pagar?");

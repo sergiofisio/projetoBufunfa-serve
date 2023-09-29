@@ -28,9 +28,9 @@ const uploadImg = async (req: Request, res: Response) => {
                 ContentType: imagem.mimetype,
             })
             .promise();
-        res.json({ fileUpload });
+        res.status(201).json({ fileUpload });
     } catch (error) {
-        res.status(500).json({ error: "Erro ao fazer o upload do arquivo" });
+        res.status(400).json({ error: "Erro ao fazer o upload do arquivo" });
     }
 };
 

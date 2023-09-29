@@ -9,10 +9,12 @@ async function register(req: Request, res: Response) {
     const { table } = req.params;
     const { name, email, password, cpf } = ceoSchema.parse(req.body);
 
+
+    const findEmailinCompany = await findUnique('company', { email });
     const findEmailinCeo = await findUnique('ceo', { email });
     const findEmailinEmployee = await findUnique('employee', { email });
 
-    if (findEmailinCeo || findEmailinEmployee) {
+    if (findEmailinCeo || findEmailinEmployee || findEmailinCompany) {
       return res
         .status(400)
         .json({ message: "Já existe um usuário com o email cadastrado no nosso sistema" });
