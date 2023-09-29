@@ -7,87 +7,105 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Company {
-  id                Int                @id @default(autoincrement())
-  email             String             @unique
-  name              String
-  slogan            String?
-  description       String?
-  cnpj              String
-  logo              String?
-  background        String?
-  salary            Int?
-  ceos              CEO[]
-  employees         Employee[]
-  password          String
-  recoveryPassword  String?
+model company {
+  id               Int        @id @default(autoincrement())
+  email            String     @unique
+  name             String
+  slogan           String?
+  description      String?
+  cnpj             String     @unique
+  logo             String?
+  background       String?
+  salary           Int?
+  password         String
+  recoveryPassword String?
+  ceos             ceo[]
+  employees        employee[]
+  type             String?    @default("company")
 }
 
-model CEO {
-  id                Int                @id @default(autoincrement())
-  name              String
-  email             String             @unique
-  cpf               String
-  photo             String?
-  companyId         Int?
-  company           Company? @relation(fields: [companyId], references: [id])
-  password          String
-  recoveryPassword  String?
+model ceo {
+  id               Int      @id @default(autoincrement())
+  name             String
+  email            String   @unique
+  cpf              String   @unique
+  photo            String?
+  companyId        Int?
+  password         String
+  recoveryPassword String?
+  company          company? @relation(fields: [companyId], references: [id])
+  type             String?   @default("ceo")
 }
 
-model Employee {
-  id                Int                @id @default(autoincrement())
-  name              String
-  email             String             @unique
-  cpf               String
-  photo             String?
-  salary            Int?
-  companyId         Int?
-  company           Company? @relation(fields: [companyId], references: [id])
-  employeeTasks     EmployeeTasks[]
-  expenses          Expense[]
-  password          String
-  recoveryPassword  String?
+model employee {
+  id               Int             @id @default(autoincrement())
+  name             String
+  email            String          @unique
+  cpf              String          @unique
+  photo            String?
+  salary           Int?
+  companyId        Int?
+  password         String
+  recoveryPassword String?
+  company          company?        @relation(fields: [companyId], references: [id])
+  employeeTasks    employeeTasks[]
+  expenses         expense[]
+  loans            loan[]
+  totalExpenses    Int?
+  totalLoans       Int?
+  totalMoney       Int?
+  type             String?          @default("employee")
 }
 
-model EmployeeTasks {
-  id                Int                @id @default(autoincrement())
-  employeeId        Int?
-  employee          Employee?           @relation(fields: [employeeId], references: [id])
-  taskId            Int
-  tasks             Task               @relation(fields: [taskId], references: [id])
+model task {
+  id            Int             @id @default(autoincrement())
+  title         String
+  description   String?
+  value         Int
+  employeeTasks employeeTasks[]
 }
 
-model Task {
-  id                Int                @id @default(autoincrement())
-  title             String
-  description       String?
-  value             Int
-  employeeTasks     EmployeeTasks[]
-  statusTask        StatusTask         @relation(fields: [statusTaskId], references: [id])
-  statusTaskId      Int                @default(1)
+model employeeTasks {
+  id         Int       @id @default(autoincrement())
+  employeeId Int?
+  taskId     Int
+  employee   employee? @relation(fields: [employeeId], references: [id])
+  tasks      task      @relation(fields: [taskId], references: [id])
+  statusTaskId Int     @default(1)
+  statusTask    statusTask      @relation(fields: [statusTaskId], references: [id])
 }
 
-model StatusTask {
-  id                Int                @id @default(autoincrement())
-  status            String
-  tasks             Task[]
+
+model statusTask {
+  id     Int    @id @default(autoincrement())
+  status String @unique
+  tasks  employeeTasks[]
 }
 
-model Expense {
-  id                Int                @id @default(autoincrement())
-  title             String
-  description       String?
-  value             Int
-  statusExpense     StatusExpense      @relation(fields: [statusExpenseId], references: [id])
-  statusExpenseId   Int                @default(1)
-  type              String
-  employee          Employee           @relation(fields: [employeeId], references: [id])
-  employeeId        Int
+model expense {
+  id              Int           @id @default(autoincrement())
+  title           String
+  description     String?
+  value           Int
+  statusExpenseId Int           @default(1)
+  type            String
+  employeeId      Int
+  employee        employee      @relation(fields: [employeeId], references: [id])
+  statusExpense   statusExpense @relation(fields: [statusExpenseId], references: [id])
+  recorrent       Boolean       @default(false)
 }
 
-model StatusExpense {
-  id                Int                @id @default(autoincrement())
-  status            String
-  expenses          Expense[]
+model statusExpense {
+  id       Int       @id @default(autoincrement())
+  status   String    @unique
+  expenses expense[]
+}
+
+model loan {
+  id         Int      @id @default(autoincrement())
+  description      String
+  value      Int
+  employeeId Int
+  employee   employee @relation(fields: [employeeId], references: [id])
+  accepted   Boolean  @default(false)
 }

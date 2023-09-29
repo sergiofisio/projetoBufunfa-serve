@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { findUnique } from "../prismaFunctions/prisma";
+import { findUnique } from "../../prismaFunctions/prisma";
 import { User } from "@src/interface/user";
 
-const { verifyInput } = require("../functions/verify");
+const { verifyInput } = require("../../functions/verify");
 const { compareSync } = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -22,23 +22,20 @@ const login = async (req: CustomRequest, res: Response): Promise<any> => {
 
         const user = await findUnique(table, { email });
 
-        const userData = user
-        delete userData.password
+        if (!user) throw new Error("Email e/ou Senha incorretos");
 
-        // const passwordIsValid = compareSync(password, user.password);
+        const passwordIsValid = compareSync(password, user.password);
 
-        // if (!passwordIsValid) throw new Error("Email e/ou Senha incorretos");
+        if (!passwordIsValid) throw new Error("Email e/ou Senha incorretos");
+        delete user.password
+        delete user.recoveryPassword
 
         const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-            expiresIn: "8h",
+            expiresIn: "1d",
         });
-
-        req.user = userData;
 
         res.json({ user, token });
     } catch (error: any) {
-        console.log(error);
-
         if (error.missingInput)
             return res.status(400).json({ missingInput: error.missingInput });
 

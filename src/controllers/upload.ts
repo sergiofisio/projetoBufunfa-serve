@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import multer from "multer";
 
 const aws = require("aws-sdk");
 
@@ -12,7 +13,8 @@ const s3 = new aws.S3({
 });
 
 const uploadImg = async (req: Request, res: Response) => {
-    const { id, table } = req.params
+    const { table } = req.params
+    const id = req.user?.id
 
     const imagem: any = req.file;
 
@@ -26,11 +28,12 @@ const uploadImg = async (req: Request, res: Response) => {
                 ContentType: imagem.mimetype,
             })
             .promise();
-        res.json({ fileUpload });
+        res.status(201).json({ fileUpload });
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ error: "Erro ao fazer o upload do arquivo" });
+        res.status(400).json({ error: "Erro ao fazer o upload do arquivo" });
     }
 };
 
-module.exports = { uploadImg };
+module.exports = {
+    uploadImg
+}

@@ -6,144 +6,565 @@
     "description": "Projeto para ensino de controle financeiro que pode ser usado em escolas ou por uma família."
   },
   "servers": [
-    { "url": "http://localhost:4000", "description": "Servidor local" }
+    {
+      "url": "http://localhost:4000",
+      "description": "Servidor local"
+    }
   ],
   "tags": [
-    { "name": "Upload" },
-    { "name": "Validations" },
-    { "name": "Users" },
-    { "name": "Tasks" },
-    { "name": "Expenses" }
+    {
+      "name": "all Users"
+    },
+    {
+      "name": "ceo only"
+    }
   ],
   "paths": {
-    "/login/{table}": {
+    "/register/{table}": {
       "post": {
-        "tags": ["Users"],
-        "summary": "Realizar login",
-        "description": "Realiza o login com email, senha e nome da tabela",
+        "tags": ["all Users"],
+        "summary": "Registrar usuário",
         "parameters": [
           {
             "name": "table",
             "in": "path",
-            "description": "Nome da tabela",
             "required": true,
-            "schema": { "type": "string" }
+            "description": "Tabela do usuário (ceo ou employee)",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
-          "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/Usuario" },
-              "examples": {
-                "Example Json": {
-                  "value": {
-                    "email": "email@example.com",
-                    "password": "123456"
-                  }
-                },
-                "Example Type": {
-                  "value": { "email": "string", "password": "string" }
-                }
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuário registrado com sucesso"
+          },
+          "400": {
+            "description": "Requisição inválida"
+          }
+        }
+      }
+    },
+    "/login/{table}": {
+      "post": {
+        "tags": ["all Users"],
+        "summary": "Login do usuário",
+        "parameters": [
+          {
+            "name": "table",
+            "in": "path",
+            "required": true,
+            "description": "Tabela do usuário (ceo ou employee)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "token": {
-                      "type": "string",
-                      "description": "Token de autenticação"
-                    }
-                  }
-                }
-              }
-            }
+            "description": "Login bem-sucedido"
           },
-          "400": { "description": "Erro de requisição" },
-          "401": { "description": "Não autorizado" }
+          "400": {
+            "description": "Requisição inválida"
+          }
         }
       }
     },
-    "/upload/{id}/{table}": {
-      "post": {
-        "tags": ["Validations"],
-        "summary": "Realizar upload",
-        "description": "Realiza o upload de imagens",
+    "/userInfo/{table}": {
+      "get": {
+        "tags": ["all Users"],
+        "summary": "Obter informações do usuário",
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Id do usuário",
-            "required": true,
-            "schema": { "type": "string" }
-          },
           {
             "name": "table",
             "in": "path",
-            "description": "Nome da tabela",
             "required": true,
-            "schema": { "type": "string" }
+            "description": "Tabela do usuário (ceo ou employee)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Informações do usuário obtidas com sucesso"
+          },
+          "400": {
+            "description": "Requisição inválida"
+          }
+        }
+      }
+    },
+    "/task/{table}/{taskId}": {
+      "get": {
+        "tags": ["all Users"],
+        "summary": "Obter informações da tarefa",
+        "parameters": [
+          {
+            "name": "table",
+            "in": "path",
+            "required": true,
+            "description": "Tabela do usuário (ceo ou employee)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "description": "ID da tarefa",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Informações da tarefa obtidas com sucesso"
+          },
+          "400": {
+            "description": "Requisição inválida"
+          }
+        }
+      }
+    },
+    "/tasks/{table}": {
+      "get": {
+        "tags": ["all Users"],
+        "summary": "Obter todas as tarefas",
+        "parameters": [
+          {
+            "name": "table",
+            "in": "path",
+            "required": true,
+            "description": "Tabela do usuário (ceo ou employee)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tarefas obtidas com sucesso"
+          },
+          "400": {
+            "description": "Requisição inválida"
+          }
+        }
+      }
+    },
+    "/upload/{table}": {
+      "post": {
+        "tags": ["all Users"],
+        "summary": "Upload de imagem",
+        "parameters": [
+          {
+            "name": "table",
+            "in": "path",
+            "required": true,
+            "description": "Tabela do usuário (ceo ou employee)",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
-          "required": true,
           "content": {
             "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "image": { "type": "string", "format": "binary" }
+                  "image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Imagem para upload"
+                  }
                 }
               }
             }
           }
         },
         "responses": {
-          "200": {
-            "description": "Sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "description": "Upload realizado com sucesso"
-                    },
-                    "url": {
-                      "type": "string",
-                      "description": "URL da imagem"
-                    }
-                  }
-                }
+          "201": {
+            "description": "Upload de imagem bem-sucedido"
+          },
+          "400": {
+            "description": "Requisição inválida"
+          }
+        }
+      }
+    },
+    "/createTask/ceo": {
+      "post": {
+        "tags": ["ceo only"],
+        "summary": "Criar tarefa",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Task"
               }
             }
-          },
-          "400": { "description": "Erro de requisição" },
-          "401": { "description": "Não autorizado" }
+          }
         },
-        "security": [{ "BearerAuth": [] }]
+        "responses": {
+          "201": {
+            "description": "Tarefa criada com sucesso"
+          },
+          "400": {
+            "description": "Requisição inválida"
+          }
+        }
+      }
+    },
+    "/createExpense/{table}": {
+      "post": {
+        "tags": ["all Users"],
+        "summary": "Criar despesa",
+        "parameters": [
+          {
+            "name": "table",
+            "in": "path",
+            "required": true,
+            "description": "Tabela do usuário (ceo ou employee)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Despesa criada com sucesso"
+          },
+          "400": {
+            "description": "Requisição inválida"
+          }
+        }
+      }
+    },
+    "/createLoan/ceo": {
+      "post": {
+        "tags": ["ceo only"],
+        "summary": "Criar empréstimo",
+        "responses": {
+          "201": {
+            "description": "Empréstimo criado com sucesso"
+          },
+          "400": {
+            "description": "Requisição inválida"
+          }
+        }
+      }
+    },
+    "/takeTask/employee/employeeTasks/:taskId": {
+      "post": {
+        "tags": ["all Users"],
+        "summary": "Pegar tarefa",
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "description": "ID da tarefa",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tarefa adicionada com sucesso"
+          },
+          "400": {
+            "description": "Requisição inválida"
+          }
+        }
+      }
+    },
+    "/updateUser/:table": {
+      "put": {
+        "tags": ["all Users"],
+        "summary": "Atualizar usuário",
+        "parameters": [
+          {
+            "name": "table",
+            "in": "path",
+            "required": true,
+            "description": "Tabela do usuário (ceo ou employee)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Usuário atualizado com sucesso"
+          },
+          "400": {
+            "description": "Requisição inválida"
+          }
+        }
+      }
+    },
+    "/updateTask/ceo/:id": {
+      "put": {
+        "tags": ["ceo only"],
+        "summary": "Atualizar tarefa",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID da tarefa",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Tarefa atualizada com sucesso"
+          },
+          "400": {
+            "description": "Requisição inválida"
+          }
+        }
+      }
+    },
+    "/updateExpense/:table/:id": {
+      "put": {
+        "tags": ["all Users"],
+        "summary": "Atualizar despesa",
+        "parameters": [
+          {
+            "name": "table",
+            "in": "path",
+            "required": true,
+            "description": "Tabela do usuário (ceo ou employee)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID da despesa",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Despesa atualizada com sucesso"
+          },
+          "400": {
+            "description": "Requisição inválida"
+          }
+        }
+      }
+    },
+    "/acceptLoan/ceo/:id": {
+      "put": {
+        "tags": ["ceo only"],
+        "summary": "Aceitar empréstimo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do empréstimo",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Empréstimo aceito"
+          },
+          "400": {
+            "description": "Requisição inválida"
+          }
+        }
+      }
+    },
+    "/deleteTask/ceo/:id": {
+      "delete": {
+        "tags": ["ceo only"],
+        "summary": "Deletar tarefa",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID da tarefa",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Tarefa deletada com sucesso"
+          },
+          "400": {
+            "description": "Requisição inválida"
+          }
+        }
+      }
+    },
+    "/deleteExpense/:table/:id": {
+      "delete": {
+        "tags": ["all Users"],
+        "summary": "Deletar despesa",
+        "parameters": [
+          {
+            "name": "table",
+            "in": "path",
+            "required": true,
+            "description": "Tabela do usuário (ceo ou employee)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID da despesa",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Despesa deletada com sucesso"
+          },
+          "400": {
+            "description": "Requisição inválida"
+          }
+        }
+      }
+    },
+    "/deleteTask/employee/employeeTasks/:taskId": {
+      "delete": {
+        "tags": ["all Users"],
+        "summary": "Deletar tarefa do funcionário",
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "description": "ID da tarefa",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Tarefa deletada com sucesso"
+          },
+          "400": {
+            "description": "Requisição inválida"
+          }
+        }
+      }
+    },
+    "/deleteLoan/:table/:id": {
+      "delete": {
+        "tags": ["all Users"],
+        "summary": "Deletar empréstimo",
+        "parameters": [
+          {
+            "name": "table",
+            "in": "path",
+            "required": true,
+            "description": "Tabela do usuário (ceo ou employee)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do empréstimo",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Empréstimo deletado com sucesso"
+          },
+          "400": {
+            "description": "Requisição inválida"
+          }
+        }
       }
     }
   },
   "components": {
     "schemas": {
-      "Usuario": {
+      "User": {
         "type": "object",
         "properties": {
-          "email": { "type": "string" },
-          "password": { "type": "string" }
-        },
-        "required": ["email", "password"]
+          "name": {
+            "type": "string",
+            "description": "Nome do usuário"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email do usuário"
+          },
+          "password": {
+            "type": "string",
+            "description": "Senha do usuário"
+          }
+        }
+      },
+      "Task": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Título da tarefa"
+          },
+          "description": {
+            "type": "string",
+            "description": "Descrição da tarefa"
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Data de vencimento da tarefa"
+          }
+        }
       }
-    },
-    "securitySchemes": { "BearerAuth": { "type": "http", "scheme": "bearer" } }
+    }
   }
 }
