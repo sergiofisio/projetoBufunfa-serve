@@ -22,7 +22,7 @@
   },
   "scripts": {
     "dev": "nodemon src/index.ts",
-    "start": "yarn migrate && yarn generate && yarn push && yarn seed && node --exec ts-node index.ts",
+    "start": "yarn migrate && yarn generate && yarn push && node --exec ts-node index.ts",
     "prisma": "npm run migrate dev && npm run generate && npm run push",
     "migrate": "npx prisma migrate dev",
     "generate": "npx prisma generate",
