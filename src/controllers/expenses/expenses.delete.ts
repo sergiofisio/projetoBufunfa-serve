@@ -9,8 +9,6 @@ const deleteExpense = async (req: Request, res: Response): Promise<any> => {
     try {
         const expense = await findUnique("expense", { id: Number(id) });
 
-        console.log(expense);
-
         if (!expense) throw new Error("Tarefa não encontrada");
 
         if (expense.statusExpenseId === 1 || type !== "ceo") throw new Error("A despesa não pode ser deletado, tem certeza que você pagou?");
