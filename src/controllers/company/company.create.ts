@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import { createOrUpdate, findUnique } from "../../prismaFunctions/prisma";
 import { Request, Response } from "express"
 
