@@ -238,7 +238,7 @@
     },
     "/createExpense/{table}": {
       "post": {
-        "tags": ["all Users"],
+        "tags": ["ceo only"],
         "summary": "Criar despesa",
         "parameters": [
           {
@@ -263,7 +263,7 @@
     },
     "/createLoan/ceo": {
       "post": {
-        "tags": ["ceo only"],
+        "tags": ["all Users"],
         "summary": "Criar empréstimo",
         "responses": {
           "201": {
@@ -275,7 +275,7 @@
         }
       }
     },
-    "/takeTask/employee/employeeTasks/:taskId": {
+    "/takeTask/employee/employeeTasks": {
       "post": {
         "tags": ["all Users"],
         "summary": "Pegar tarefa",

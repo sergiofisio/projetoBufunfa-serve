@@ -1,14 +1,13 @@
 -- CreateTable
 CREATE TABLE "company" (
     "id" SERIAL NOT NULL,
-    "email" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "slogan" TEXT,
     "description" TEXT,
     "cnpj" TEXT NOT NULL,
     "logo" TEXT,
     "background" TEXT,
-    "salary" INTEGER,
+    "salary" INTEGER DEFAULT 0,
 
     CONSTRAINT "company_pkey" PRIMARY KEY ("id")
 );
@@ -59,7 +58,7 @@ CREATE TABLE "task" (
 CREATE TABLE "employeeTasks" (
     "id" SERIAL NOT NULL,
     "employeeId" INTEGER,
-    "taskId" INTEGER NOT NULL,
+    "taskId" INTEGER,
     "statusTaskId" INTEGER NOT NULL DEFAULT 1,
 
     CONSTRAINT "employeeTasks_pkey" PRIMARY KEY ("id")
@@ -117,9 +116,6 @@ CREATE TABLE "loan" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "company_email_key" ON "company"("email");
-
--- CreateIndex
 CREATE UNIQUE INDEX "company_cnpj_key" ON "company"("cnpj");
 
 -- CreateIndex
@@ -153,7 +149,7 @@ ALTER TABLE "task" ADD CONSTRAINT "task_companyId_fkey" FOREIGN KEY ("companyId"
 ALTER TABLE "employeeTasks" ADD CONSTRAINT "employeeTasks_employeeId_fkey" FOREIGN KEY ("employeeId") REFERENCES "employee"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "employeeTasks" ADD CONSTRAINT "employeeTasks_taskId_fkey" FOREIGN KEY ("taskId") REFERENCES "task"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "employeeTasks" ADD CONSTRAINT "employeeTasks_taskId_fkey" FOREIGN KEY ("taskId") REFERENCES "task"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "employeeTasks" ADD CONSTRAINT "employeeTasks_statusTaskId_fkey" FOREIGN KEY ("statusTaskId") REFERENCES "statusTask"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

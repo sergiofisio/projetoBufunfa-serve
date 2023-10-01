@@ -7,11 +7,11 @@ const deleteExpense = async (req: Request, res: Response): Promise<any> => {
     const type = req.user?.type;
 
     try {
+        if (type !== "ceo") throw new Error("Você não tem permissão para esta funcionalidade");
+
         const expense = await findUnique("expense", { id: Number(id) });
 
         if (!expense) throw new Error("Tarefa não encontrada");
-
-        if (expense.statusExpenseId === 1 || type !== "ceo") throw new Error("A despesa não pode ser deletado, tem certeza que você pagou?");
 
         await deleteOne("expense", Number(id));
 

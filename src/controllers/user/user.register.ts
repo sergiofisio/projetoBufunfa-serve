@@ -9,12 +9,10 @@ async function register(req: Request, res: Response) {
     const { table } = req.params;
     const { name, email, password, cpf } = ceoSchema.parse(req.body);
 
-
-    const findEmailinCompany = await findUnique('company', { email });
     const findEmailinCeo = await findUnique('ceo', { email });
     const findEmailinEmployee = await findUnique('employee', { email });
 
-    if (findEmailinCeo || findEmailinEmployee || findEmailinCompany) {
+    if (findEmailinCeo || findEmailinEmployee) {
       return res
         .status(400)
         .json({ message: "Já existe um usuário com o email cadastrado no nosso sistema" });
@@ -29,7 +27,7 @@ async function register(req: Request, res: Response) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const createCeo = await createOrUpdate(table, {
+    await createOrUpdate(table, {
       ...req.body,
       password: hashedPassword,
     });

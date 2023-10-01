@@ -15,6 +15,7 @@ const { companyInfo } = require("../controllers/company/company.info")
 const { createCompany } = require("../controllers/company/company.create")
 const { hireEmployee } = require("../controllers/company/company.hireEmployee")
 const { updateCompany } = require("../controllers/company/company.update")
+const { addCeo } = require("../controllers/company/company.addCeo")
 
 const route = require("express").Router();
 const { uploadImg } = require("../controllers/upload");
@@ -34,8 +35,9 @@ route.put('/updateUser/:table', update)
 route.put('/updateTask/ceo/:id', updateTask)
 route.put('/updateExpense/:table/:id', updateExpense)
 route.put('/acceptLoan/ceo/:id', acceptLoan)
-route.put('/hireEmployee/:table/:id', hireEmployee)
+route.put('/hireEmployee/:table/:id/:companyId', hireEmployee)
 route.put('/updateCompany/:table', updateCompany)
+route.put('/addCeo/ceo/:companyId', addCeo)
 route.delete('/deleteTask/ceo/:id', deleteTask)
 route.delete('/deleteExpense/:table/:id', deleteExpense)
 route.delete('/deleteTask/employee/employeeTasks/:taskId', deleteTaskEmployee)

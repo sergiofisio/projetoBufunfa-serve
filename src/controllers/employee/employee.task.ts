@@ -1,22 +1,25 @@
 import { Request, Response } from "express";
-import { createOrUpdate, deleteOne, findFirst, findUnique } from "../../prismaFunctions/prisma";
+import { createOrUpdate, deleteOne, findFirst, findMany, findUnique } from "../../prismaFunctions/prisma";
 
 const takeTask = async (req: Request, res: Response): Promise<any> => {
-    const { taskId } = req.params;
     const id = req.user?.id;
+    let message: string = "Tarefas já cadastradas para este Funcionario"
 
     try {
-        const task = await findUnique('task', { id: Number(taskId) });
+        const allTasks = await findMany('task');
+        allTasks.map(async (task: any): Promise<any> => {
 
-        if (!task) throw new Error("Tarefa não encontrado");
+            const taskInTasks = await findFirst('employeeTasks', { employeeId: Number(id), taskId: task.id });
 
-        const taskInTasks = await findFirst('employeeTasks', { taskId: task.id });
+            if (taskInTasks) {
+                return
+            } else {
+                await createOrUpdate('employeeTasks', { taskId: task.id, employeeId: Number(id) });
+                message = "Tarefas adicionada com sucesso"
+            }
+        })
 
-        if (taskInTasks) throw new Error("Funcionario ja tem essa tarefa");
-
-        await createOrUpdate('employeeTasks', { taskId: task.id, employeeId: Number(id) });
-
-        res.status(200).json({ mensagem: "Tarefa adicionada com sucesso" });
+        return res.status(200).json({ mensagem: message });
     } catch (error: any) {
         return res.status(400).json({ error: error.message });
     }

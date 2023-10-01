@@ -5,7 +5,8 @@ export const prisma = new PrismaClient();
 class includes {
   id?: number;
   name?: string;
-  ceos?: boolean;
+  ceos?: { include: { ceo: true } };
+  companyEmployees?: { include: { employee: true } };
   employees?: boolean;
   statusExpenseId?: boolean;
   employeeTasks?: {
@@ -61,6 +62,9 @@ export async function findMany(table: string, includes?: includes) {
  */
 
 export async function createOrUpdate(table: string, data: any, id?: number) {
+
+  console.log({ table, data });
+
 
   if (id) {
     return await prisma[table].update({

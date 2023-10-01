@@ -9,18 +9,33 @@ datasource db {
 
 model company {
   id               Int        @id @default(autoincrement())
-  email            String     @unique
   name             String
   slogan           String?
   description      String?
   cnpj             String     @unique
   logo             String?
   background       String?
-  salary           Int?
-  ceos             ceo[]
-  employees        employee[]
+  salary           Int?       @default(0)
+  ceos             companyCeos[]
+  companyEmployees companyEmployees[]
   tasks            task[]
   expenses         expense[]
+}
+
+model companyCeos{
+  id  Int @id @default(autoincrement())
+  ceoId Int?
+  ceo ceo? @relation(fields: [ceoId], references: [id])
+  companyId Int?
+  company company? @relation(fields: [companyId], references: [id])
+}
+
+model companyEmployees{
+  id  Int @id @default(autoincrement())
+  employeeId Int?
+  employee employee? @relation(fields: [employeeId], references: [id])
+  companyId Int?
+  company company? @relation(fields: [companyId], references: [id])
 }
 
 model ceo {
@@ -29,10 +44,9 @@ model ceo {
   email            String   @unique
   cpf              String   @unique
   photo            String?
-  companyId        Int?
   password         String
   recoveryPassword String?
-  company          company? @relation(fields: [companyId], references: [id])
+  companies        companyCeos[]
   type             String?   @default("ceo")
 }
 
@@ -46,10 +60,10 @@ model employee {
   companyId        Int?
   password         String
   recoveryPassword String?
-  company          company?        @relation(fields: [companyId], references: [id])
+  company          companyEmployees[]
   employeeTasks    employeeTasks[]
   expenses         employeeExpenses[]
-  loans            loan[]
+  loans            employeeLoans[]
   type             String?          @default("employee")
 }
 
@@ -67,8 +81,8 @@ model employeeTasks {
   id         Int       @id @default(autoincrement())
   employeeId Int?
   employee   employee? @relation(fields: [employeeId], references: [id])
-  taskId     Int
-  tasks      task      @relation(fields: [taskId], references: [id])
+  taskId     Int?
+  tasks      task?      @relation(fields: [taskId], references: [id])
   statusTaskId Int     @default(1)
   statusTask    statusTask      @relation(fields: [statusTaskId], references: [id])
 }
@@ -113,7 +127,14 @@ model loan {
   dueDate          Int
   interestRate     Int
   value            Int
-  employeeId       Int
-  employee         employee @relation(fields: [employeeId], references: [id])
+  employeeLoans    employeeLoans[]
+}
+
+model employeeLoans{
+  id         Int       @id @default(autoincrement())
+  employeeId Int?
+  employee   employee? @relation(fields: [employeeId], references: [id])
+  loanId     Int?
+  loan       loan?      @relation(fields: [loanId], references: [id])
   accepted         Boolean  @default(false)
 }
