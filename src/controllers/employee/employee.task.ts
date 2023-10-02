@@ -3,11 +3,17 @@ import { createOrUpdate, deleteOne, findFirst, findMany, findUnique } from "../.
 
 const takeTask = async (req: Request, res: Response): Promise<any> => {
     const id = req.user?.id;
+    const { companyId } = req.params;
     let message: string = "Tarefas já cadastradas para este Funcionario"
 
     try {
         const allTasks = await findMany('task');
+
+        if (!allTasks.length) throw new Error("Não há tarefas cadastradas")
+
         allTasks.map(async (task: any): Promise<any> => {
+
+            if (task.companyId !== Number(companyId)) return
 
             const taskInTasks = await findFirst('employeeTasks', { employeeId: Number(id), taskId: task.id });
 
@@ -17,9 +23,10 @@ const takeTask = async (req: Request, res: Response): Promise<any> => {
                 await createOrUpdate('employeeTasks', { taskId: task.id, employeeId: Number(id) });
                 message = "Tarefas adicionada com sucesso"
             }
+            return res.status(200).json({ mensagem: message });
         })
-
         return res.status(200).json({ mensagem: message });
+
     } catch (error: any) {
         return res.status(400).json({ error: error.message });
     }

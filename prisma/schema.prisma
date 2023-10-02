@@ -87,7 +87,6 @@ model employeeTasks {
   statusTask    statusTask      @relation(fields: [statusTaskId], references: [id])
 }
 
-
 model statusTask {
   id     Int    @id @default(autoincrement())
   status String @unique

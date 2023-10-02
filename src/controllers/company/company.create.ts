@@ -6,6 +6,8 @@ const createCompany = async (req: Request, res: Response): Promise<any> => {
     let data = req.body;
     const id = req.user?.id;
     const type = req.user?.type;
+    console.log(type);
+
 
     try {
         if (type !== "ceo") throw new Error("Você não tem permissão para esta funcionalidade");

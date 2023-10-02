@@ -6,15 +6,19 @@ class includes {
   id?: number;
   name?: string;
   ceos?: { include: { ceo: true } };
-  companyEmployees?: { include: { employee: true } };
+  company?: { include: { company: boolean } };
+  companyEmployees?: { include: { employee: boolean } };
   employees?: boolean;
   statusExpenseId?: boolean;
+  companyId?: number;
   employeeTasks?: {
     include: {
       tasks: boolean;
     };
   };
-  expenses?: boolean;
+  tasks?: boolean;
+  expenses?: boolean | { include: { expenses: boolean } };
+  loans?: boolean | { include: { loan: boolean } }
 }
 
 /**
@@ -91,6 +95,12 @@ export async function deleteOne(table: string, id: number) {
   });
 }
 
+/**
+ * Encontra o primeiro registro em uma tabela específica com base em uma condição fornecida.
+ * @param table O nome da tabela em que o registro será encontrado.
+ * @param data Os critérios de pesquisa para encontrar o registro, por exemplo pode ser usado id ou email.
+ * @returns O registro encontrado.
+ */
 export async function findFirst(table: string, data: any) {
 
   const Infos = await prisma[table].findFirst({

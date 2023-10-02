@@ -26,6 +26,7 @@ const verifyToken = (req: Request, res: Response, next: NextFunction): void => {
                 } else {
                     const user = await findUnique(req.originalUrl.split("/")[2], { id: decoded.id });
 
+
                     if (!user) {
                         return res.status(401).json({ error: "Token inválido" });
                     }

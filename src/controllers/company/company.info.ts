@@ -7,8 +7,12 @@ const companyInfo = async (req: Request, res: Response): Promise<any> => {
 
     try {
         const company = await findUnique("company", { id: Number(companyId) }, {
-            ceos: { include: { ceo: true } },
-            companyEmployees: { include: { employee: true } },
+            ceos: {
+                include: { ceo: true }
+            }, companyEmployees: {
+                include: { employee: true }
+            }, tasks: true,
+            expenses: true
         });
         if (company.ceos.length) {
             company.ceos.forEach((ceo: any) => {
@@ -30,11 +34,11 @@ const companyInfo = async (req: Request, res: Response): Promise<any> => {
             });
         }
 
-        // if (type === "employee") {
-        //     delete company.salary
-        //     delete company.recoveryPassword
-        //     delete company.cnpj
-        // }
+        if (type === "employee") {
+            delete company.salary
+            delete company.recoveryPassword
+            delete company.cnpj
+        }
 
         res.status(200).json({ company });
     } catch (error: any) {
