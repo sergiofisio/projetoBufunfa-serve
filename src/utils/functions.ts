@@ -1,7 +1,13 @@
-export const deleteProperties = (items: any[]) => {
+export const deleteProperties = (items: any[], properties: string[], secondProperty?: string, secoundProperties?: string[]) => {
+
     items.forEach((item: any) => {
-        delete item.id;
-        delete item.emploeeId;
-        delete item.companyId;
+        properties.forEach((property: string) => delete item[property]);
+        if (secondProperty) {
+            if (item[secondProperty]) {
+                secoundProperties?.forEach((property: string) => {
+                    delete item[secondProperty][property]
+                });
+            }
+        }
     });
 };

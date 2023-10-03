@@ -1,3 +1,4 @@
+import { deleteProperties } from "../../utils/functions";
 import { findUnique } from "../../prismaFunctions/prisma";
 import { Request, Response } from "express";
 
@@ -9,35 +10,23 @@ const companyInfo = async (req: Request, res: Response): Promise<any> => {
         const company = await findUnique("company", { id: Number(companyId) }, {
             ceos: {
                 include: { ceo: true }
-            }, companyEmployees: {
+            },
+            companyEmployees: {
                 include: { employee: true }
-            }, tasks: true,
-            expenses: true
+            },
+            tasks: { include: { task: true } },
+            expenses: { include: { expense: true } },
+            loans: { include: { loan: true } }
         });
-        if (company.ceos.length) {
-            company.ceos.forEach((ceo: any) => {
-                delete ceo.id
-                delete ceo.ceoId
-                delete ceo.companyId
-                delete ceo.ceo.password
-                delete ceo.ceo.recoveryPassword
-            });
-        }
 
-        if (company.companyEmployees.length) {
-            company.companyEmployees.forEach((employee: any) => {
-                delete employee.id
-                delete employee.employeeId
-                delete employee.companyId
-                delete employee.employee.password
-                delete employee.employee.recoveryPassword
-            });
-        }
+        if (company.ceos.length)
+            deleteProperties(company.ceos, [], "ceo", ['password', 'recoveryPassword']);
+
+        if (company.companyEmployees.length)
+            deleteProperties(company.companyEmployees, [], "employee", ['password', 'recoveryPassword']);
 
         if (type === "employee") {
-            delete company.salary
-            delete company.recoveryPassword
-            delete company.cnpj
+            deleteProperties(company, ['salary', 'cnpj']);
         }
 
         res.status(200).json({ company });
@@ -45,7 +34,6 @@ const companyInfo = async (req: Request, res: Response): Promise<any> => {
         console.log(error);
 
         res.status(400).json({ error: error.message });
-
     }
 }
 

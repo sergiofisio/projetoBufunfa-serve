@@ -4,27 +4,34 @@ import { createOrUpdate, deleteOne, findFirst, findMany, findUnique } from "../.
 const takeTask = async (req: Request, res: Response): Promise<any> => {
     const id = req.user?.id;
     const { companyId } = req.params;
-    let message: string = "Tarefas já cadastradas para este Funcionario"
 
     try {
         const allTasks = await findMany('task');
 
-        if (!allTasks.length) throw new Error("Não há tarefas cadastradas")
+        if (!allTasks.length) throw new Error("Não há tarefas cadastradas");
 
-        allTasks.map(async (task: any): Promise<any> => {
+        let message: string;
+        let taskAdded = false;
 
-            if (task.companyId !== Number(companyId)) return
+        await Promise.all(allTasks.map(async (task: any): Promise<any> => {
+            if (task.companyId !== Number(companyId)) return;
 
             const taskInTasks = await findFirst('employeeTasks', { employeeId: Number(id), taskId: task.id });
 
             if (taskInTasks) {
-                return
+                return;
             } else {
                 await createOrUpdate('employeeTasks', { taskId: task.id, employeeId: Number(id) });
-                message = "Tarefas adicionada com sucesso"
+                taskAdded = true;
             }
-            return res.status(200).json({ mensagem: message });
-        })
+        }));
+
+        if (taskAdded) {
+            message = "Tarefas adicionadas com sucesso";
+        } else {
+            throw new Error("Tarefas já cadastradas para este Funcionario");
+        }
+
         return res.status(200).json({ mensagem: message });
 
     } catch (error: any) {

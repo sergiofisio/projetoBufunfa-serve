@@ -10,14 +10,10 @@ const employeeInfo = async (req: Request, res: Response): Promise<any> => {
 
         const employeeInfo = await findUnique("employee", { id: Number(employeeId) }, {
             company: { include: { company: true } },
-            employeeTasks: {
-                include: {
-                    tasks: true
-                }
-            },
+            tasks: { include: { task: true } },
             expenses: {
                 include: {
-                    expenses: true
+                    expense: true
                 }
             },
             loans: {
@@ -29,37 +25,6 @@ const employeeInfo = async (req: Request, res: Response): Promise<any> => {
 
         delete employeeInfo.password
         delete employeeInfo.recoveryPassword
-        if (employeeInfo.company.length) {
-            employeeInfo.company.forEach((company: any) => {
-                delete company.id
-                delete company.employeeId
-                delete company.companyId
-            })
-        }
-
-        if (employeeInfo.employeeTasks.length) {
-            employeeInfo.employeeTasks.forEach((employeeTask: any) => {
-                delete employeeTask.id
-                delete employeeTask.employeeId
-                delete employeeTask.taskId
-            })
-        }
-        console.log(employeeInfo.expenses);
-
-        if (employeeInfo.expenses.length) {
-            employeeInfo.expenses.forEach((expense: any) => {
-                delete expense.id
-                delete expense.employeeId
-                delete expense.taskId
-            })
-        }
-        if (employeeInfo.loans.length) {
-            employeeInfo.loans.forEach((loan: any) => {
-                delete loan.id
-                delete loan.employeeId
-                delete loan.taskId
-            })
-        }
 
         res.json({ employeeInfo });
 

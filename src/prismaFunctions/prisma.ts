@@ -11,13 +11,13 @@ class includes {
   employees?: boolean;
   statusExpenseId?: boolean;
   companyId?: number;
-  employeeTasks?: {
+  employeeTasks?: boolean | {
     include: {
-      tasks: boolean;
+      task: boolean;
     };
   };
-  tasks?: boolean;
-  expenses?: boolean | { include: { expenses: boolean } };
+  tasks?: boolean | { include: { task: boolean } };
+  expenses?: boolean | { include: { expense: boolean } };
   loans?: boolean | { include: { loan: boolean } }
 }
 
@@ -34,6 +34,7 @@ export async function findUnique(
   data?: any,
   includes?: includes
 ) {
+
   const where = data;
   const Infos = await prisma[table].findUnique({
     where,
@@ -66,9 +67,6 @@ export async function findMany(table: string, includes?: includes) {
  */
 
 export async function createOrUpdate(table: string, data: any, id?: number) {
-
-  console.log({ table, data });
-
 
   if (id) {
     return await prisma[table].update({

@@ -5,6 +5,8 @@ import { Request, Response } from "express";
 const getUserInfo = async (req: Request, res: Response): Promise<any> => {
     const { table } = req.params;
     const userId = req.user?.id;
+    console.log(userId);
+
 
     try {
         const include = table === 'employee'
@@ -12,9 +14,9 @@ const getUserInfo = async (req: Request, res: Response): Promise<any> => {
                 company: {
                     include: { company: true }
                 }, employeeTasks: {
-                    include: { tasks: true }
+                    include: { task: true }
                 }, expenses: {
-                    include: { expenses: true }
+                    include: { expense: true }
                 }, loans: {
                     include: { loan: true }
                 },
@@ -23,23 +25,23 @@ const getUserInfo = async (req: Request, res: Response): Promise<any> => {
         const user = await findUnique(table, { id: Number(userId) }, include);
 
         if (user.companies?.length) {
-            deleteProperties(user.companies);
+            deleteProperties(user.companies, ['id', 'employeeId', 'companyId']);
         }
 
         if (user.company?.length) {
-            deleteProperties(user.company);
+            deleteProperties(user.company, ['id', 'employeeId', 'companyId']);
         }
 
         if (user.employeeTasks?.length) {
-            deleteProperties(user.employeeTasks);
+            deleteProperties(user.employeeTasks, ['id', 'employeeId', 'taskId']);
         }
 
         if (user.expenses?.length) {
-            deleteProperties(user.expenses);
+            deleteProperties(user.expenses, ['id', 'employeeId', 'expenseId']);
         }
 
         if (user.loans?.length) {
-            deleteProperties(user.loans);
+            deleteProperties(user.loans, ['id', 'employeeId', 'loanId']);
         }
 
         if (user.type === 'employee' && user.type !== table) {
@@ -55,6 +57,8 @@ const getUserInfo = async (req: Request, res: Response): Promise<any> => {
 
         res.status(200).json({ [table]: user });
     } catch (error: any) {
+        console.log(error);
+
         res.status(400).json({ error: error.message });
     }
 };

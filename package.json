@@ -25,7 +25,7 @@
     "begin": "yarn && yarn prisma && yarn seed && yarn build",
     "start": "node dist/index.js",
     "build": "tsc",
-    "prisma": "npm run migrate dev && npm run generate && npm run push",
+    "prisma": "npm run migrate dev && npm run generate && npm run push && npm run seed",
     "migrate": "npx prisma migrate dev",
     "generate": "npx prisma generate",
     "pull": "npx prisma db pull",
