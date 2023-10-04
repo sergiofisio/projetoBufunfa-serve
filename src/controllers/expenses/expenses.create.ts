@@ -9,7 +9,7 @@ const createExpense = async (req: Request, res: Response): Promise<any> => {
 
     try {
         if (type !== "ceo") throw new CustomError("Você não tem permissão para esta funcionalidade", 403);
-        const findCompany = await findUnique("company", { id: companyId });
+        const findCompany = await findUnique("company", { id: Number(companyId) });
 
         if (!findCompany) throw new CustomError("Empresa não encontrada", 402);
         await createOrUpdate("expense", data);
