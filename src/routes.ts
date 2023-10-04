@@ -9,9 +9,12 @@ const allRoutes = express();
 allRoutes.use(express.json());
 
 allRoutes.use((req: Request, _: Response, next: NextFunction) => {
-  const url = req.protocol + "://" + req.get("host") + req.originalUrl;
+  const url = req.protocol + '://' + req.get('host') + req.originalUrl;
+  console.log('url: ', url);
+  console.log('metodo: ', req.method);
   next();
 });
+
 allRoutes.use('/swaggerDocs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 allRoutes.use(require("./router/openRoute"));
 

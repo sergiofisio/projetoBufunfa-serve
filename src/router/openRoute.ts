@@ -6,8 +6,10 @@ import { sendRecoveryEmail } from './../controllers/user/user.recovery';
 
 const route = require("express").Router();
 
-route.get("/", (req: Request, res: Response) => {
-    res.send("Servidor inicializado");
+route.get("*", (req: Request, res: Response) => {
+    const swaggerLink = `${req.protocol}://${req.get("host")}${req.originalUrl}swaggerDocs`;
+    const responseText = `Bem-vindo ao projeto Bufunfa! Visite o nosso swagger no link: <a href="${swaggerLink}">${swaggerLink}</a>`;
+    res.send(responseText);
 });
 
 route.post('/recovery', sendRecoveryEmail)
