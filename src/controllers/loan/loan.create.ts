@@ -1,5 +1,6 @@
 import { createOrUpdate, findFirst, findUnique } from "../../prismaFunctions/prisma";
 import { Request, Response } from "express";
+import { CustomError } from './../../class/class';
 
 const createLoan = async (req: Request, res: Response): Promise<any> => {
     const data = req.body;
@@ -7,7 +8,7 @@ const createLoan = async (req: Request, res: Response): Promise<any> => {
 
     try {
         const findCompany = await findUnique("company", { id: Number(data.companyId) });
-        if (!findCompany) throw new Error("Empresa não encontrada");
+        if (!findCompany) throw new CustomError("Empresa não encontrada", 401);
 
         const findLoan = await findFirst("loan", {
             AND: [
@@ -16,7 +17,7 @@ const createLoan = async (req: Request, res: Response): Promise<any> => {
             ]
         });
 
-        if (findLoan) throw new Error("Emprestimo já existente");
+        if (findLoan) throw new CustomError("Emprestimo já existente", 402);
 
         const loan = await createOrUpdate("loan", data);
 
@@ -24,9 +25,8 @@ const createLoan = async (req: Request, res: Response): Promise<any> => {
 
         res.status(201).json({ mensagem: "Emprestimo criado com sucesso" });
     } catch (error: any) {
-        console.log(error);
 
-        return res.status(400).json({ error: error.message });
+        return res.status(error.status).json({ error: error.message });
     }
 }
 

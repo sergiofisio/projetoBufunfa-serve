@@ -2,7 +2,7 @@ const { createTask } = require("../controllers/task/task.create");
 const { updateTask } = require("../controllers/task/task.update");
 const { deleteTask } = require("../controllers/task/task.delete");
 const { update } = require("../controllers/user/user.update");
-const { takeTask, deleteTaskEmployee } = require('../controllers/employee/employee.task')
+const { takeTask } = require('../controllers/employee/employee.task')
 const { getUserInfo } = require("../controllers/user/user.info");
 const { getTaskInfo, getAllTasks } = require("../controllers/task/tasks");
 const { createExpense } = require("../controllers/expenses/expenses.create")
@@ -25,24 +25,23 @@ const multer = require("../middleware/multer");
 route.get("/userInfo/:table", getUserInfo)
 route.get('/task/:table/:taskId', getTaskInfo)
 route.get('/tasks/:table', getAllTasks)
-route.get('/companyInfo/ceo/:companyId', companyInfo)
+route.get('/companyInfo/:table/:companyId', companyInfo)
 route.get('/employeeInfo/:table/:employeeId', employeeInfo)
 route.post("/upload/:table", multer.single("image"), uploadImg)
-route.post('/createCompany/:table', createCompany)
+route.post('/createCompany/ceo', createCompany)
 route.post('/createTask/ceo/:companyId', createTask)
 route.post('/createExpense/:table', createExpense)
 route.post('/createLoan/employee', createLoan)
-route.post('/takeTask/employee/employeeTasks/:taskId/:companyId', takeTask)
+route.post('/takeTask/employee/employeeTasks/:companyId', takeTask)
 route.put('/updateUser/:table', update)
 route.put('/updateTask/ceo/:id', updateTask)
-route.put('/updateExpense/:table/:id', updateExpense)
+route.put('/updateExpense/ceo/:id', updateExpense)
 route.put('/acceptLoan/ceo/:id', acceptLoan)
-route.put('/hireEmployee/:table/:employeeId/:companyId', hireEmployee)
-route.put('/updateCompany/:table', updateCompany)
+route.put('/hireEmployee/ceo/:employeeId/:companyId', hireEmployee)
+route.put('/updateCompany/ceo/:companyId', updateCompany)
 route.put('/addCeo/ceo/:companyId', addCeo)
 route.delete('/deleteTask/ceo/:id', deleteTask)
-route.delete('/deleteExpense/:table/:id', deleteExpense)
-route.delete('/deleteTask/employee/employeeTasks/:taskId', deleteTaskEmployee)
-route.delete('/deleteLoan/:table/:id', deleteLoan)
+route.delete('/deleteExpense/ceo/:id', deleteExpense)
+route.delete('/deleteLoan/ceo/:id', deleteLoan)
 
 module.exports = route;

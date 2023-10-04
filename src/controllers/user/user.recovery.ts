@@ -1,12 +1,11 @@
 import {
-  createOrUpdate,
   findUnique,
   prisma,
 } from "../../prismaFunctions/prisma";
 import { Request, Response } from "express";
 import generateResetToken from "../../utils/generateRecoveryToken";
-import { handleError } from "../../utils/zodErrorHandler";
 import sendPasswordResetEmail from "../../utils/sendEmail";
+import { CustomError } from './../../class/class';
 
 export const sendRecoveryEmail = async (req: Request, res: Response) => {
   try {
@@ -29,7 +28,7 @@ export const sendRecoveryEmail = async (req: Request, res: Response) => {
     }
 
     if (!userCEO && !userEmployee) {
-      return res.status(400).json({ error: "Email not found" });
+      throw new CustomError("Email not found", 400);
     }
 
     const token = generateResetToken(email);
@@ -44,9 +43,7 @@ export const sendRecoveryEmail = async (req: Request, res: Response) => {
     await sendPasswordResetEmail(email, token);
 
     return res.status(200).json({ message: "Email sent successfully" });
-  } catch (error) {
-    console.log(error);
-    const { status, message } = handleError(error);
-    return res.status(status).json({ message });
+  } catch (error: any) {
+    return res.status(error.status).json({ message: error.message });
   }
 };

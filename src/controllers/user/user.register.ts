@@ -3,6 +3,7 @@ import { ceoSchema } from "../../schemas/userSchema";
 import { createOrUpdate, findUnique, prisma } from "../../prismaFunctions/prisma";
 import bcrypt from "bcrypt";
 import { handleError } from "../../utils/zodErrorHandler";
+import { CustomError } from './../../class/class';
 
 async function register(req: Request, res: Response) {
   try {
@@ -13,16 +14,12 @@ async function register(req: Request, res: Response) {
     const findEmailinEmployee = await findUnique('employee', { email });
 
     if (findEmailinCeo || findEmailinEmployee) {
-      return res
-        .status(400)
-        .json({ message: "Já existe um usuário com o email cadastrado no nosso sistema" });
+      throw new CustomError("Já existe um usuário com o email cadastrado no nosso sistema", 400);
     }
 
     const findCpf = await prisma[table].findUnique({ where: { cpf } });
     if (findCpf) {
-      return res
-        .status(400)
-        .json({ message: "Já existe um usuário com o cpf informado" });
+      throw new CustomError("Já existe um usuário com o cpf informado", 400);
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -33,9 +30,8 @@ async function register(req: Request, res: Response) {
     });
 
     return res.status(201).json({ Mensagem: "Usuário criado com sucesso" });
-  } catch (error) {
-    const { status, message } = handleError(error);
-    return res.status(status).json({ message });
+  } catch (error: any) {
+    return res.status(error.status).json({ message: error.message });
   }
 }
 

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { createOrUpdate, deleteOne, findFirst, findMany, findUnique } from "../../prismaFunctions/prisma";
+import { CustomError } from './../../class/class';
 
 const takeTask = async (req: Request, res: Response): Promise<any> => {
     const id = req.user?.id;
@@ -8,7 +9,7 @@ const takeTask = async (req: Request, res: Response): Promise<any> => {
     try {
         const allTasks = await findMany('task');
 
-        if (!allTasks.length) throw new Error("Não há tarefas cadastradas");
+        if (!allTasks.length) throw new CustomError("Não há tarefas cadastradas", 404);
 
         let message: string;
         let taskAdded = false;
@@ -29,13 +30,13 @@ const takeTask = async (req: Request, res: Response): Promise<any> => {
         if (taskAdded) {
             message = "Tarefas adicionadas com sucesso";
         } else {
-            throw new Error("Tarefas já cadastradas para este Funcionario");
+            throw new CustomError("Tarefas já cadastradas para este Funcionario", 402);
         }
 
         return res.status(200).json({ mensagem: message });
 
     } catch (error: any) {
-        return res.status(400).json({ error: error.message });
+        return res.status(error.status).json({ error: error.message });
     }
 }
 

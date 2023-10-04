@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import { createOrUpdate, findUnique } from "../../prismaFunctions/prisma";
+import { CustomError } from './../../class/class';
 
 const update = async (req: Request, res: Response): Promise<any> => {
     const data = req.body;
@@ -10,7 +11,7 @@ const update = async (req: Request, res: Response): Promise<any> => {
     try {
         const user = await findUnique(table, { id: Number(id) });
 
-        if (!user) throw new Error("Funcionário não encontrado");
+        if (!user) throw new CustomError("Funcionário não encontrado", 400);
 
         if (Number(user.id) !== Number(id) && user.type !== table) throw new Error("Você não tem acesso a este recurso")
 
@@ -23,9 +24,8 @@ const update = async (req: Request, res: Response): Promise<any> => {
 
         res.status(202).json({ mensagem: "Usuário atualizado com sucesso" });
     } catch (error: any) {
-        console.log(error);
 
-        return res.status(400).json({ error: error.message });
+        return res.status(error.status).json({ error: error.message });
     }
 }
 

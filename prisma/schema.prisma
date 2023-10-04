@@ -58,7 +58,6 @@ model employee {
   email            String          @unique
   cpf              String          @unique
   photo            String?
-  companyId        Int?
   password         String
   recoveryPassword String?
   company          companyEmployees[]
@@ -138,5 +137,5 @@ model employeeLoans{
   loan       loan?      @relation(fields: [loanId], references: [id])
   companyId  Int?
   company    company?   @relation(fields: [companyId], references: [id])
-  accepted         Boolean  @default(false)
+  accepted   Boolean?  
 }

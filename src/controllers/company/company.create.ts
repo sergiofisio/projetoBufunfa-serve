@@ -1,6 +1,6 @@
-import bcrypt from 'bcrypt';
 import { createOrUpdate, findUnique } from "../../prismaFunctions/prisma";
 import { Request, Response } from "express"
+import { CustomError } from '../../class/class';
 
 const createCompany = async (req: Request, res: Response): Promise<any> => {
     let data = req.body;
@@ -10,11 +10,11 @@ const createCompany = async (req: Request, res: Response): Promise<any> => {
 
 
     try {
-        if (type !== "ceo") throw new Error("Você não tem permissão para esta funcionalidade");
+        if (type !== "ceo") throw new CustomError("Você não tem permissão para esta funcionalidade", 403);
 
         const findCompany = await findUnique("company", { cnpj: data.cnpj })
 
-        if (findCompany) throw new Error("Ja existe uma empresa com esse CNPJ no nosso cadastro");
+        if (findCompany) throw new CustomError("Ja existe uma empresa com esse CNPJ no nosso cadastro", 400);
 
         const company = await createOrUpdate("company", data);
 
@@ -26,7 +26,7 @@ const createCompany = async (req: Request, res: Response): Promise<any> => {
     } catch (error: any) {
         console.log(error);
 
-        res.status(400).json({ error: error.message });
+        res.status(error.status).json({ error: error.message });
     }
 }
 module.exports = { createCompany }

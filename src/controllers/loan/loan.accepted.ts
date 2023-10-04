@@ -1,5 +1,6 @@
 import { createOrUpdate } from "../../prismaFunctions/prisma";
 import { Request, Response } from "express";
+import { CustomError } from './../../class/class';
 
 const acceptLoan = async (req: Request, res: Response): Promise<any> => {
     const data = req.body;
@@ -7,13 +8,15 @@ const acceptLoan = async (req: Request, res: Response): Promise<any> => {
     const type = req.user?.type
 
     try {
-        if (type !== "ceo") throw new Error("Você não tem acesso a esta funcionalidade");
+        if (type !== "ceo") throw new CustomError("Você não tem acesso a esta funcionalidade", 403);
 
         await createOrUpdate("loan", { ...data }, Number(id));
 
-        res.status(201).json({ mensagem: "Emprestimo aceito" });
+        res.status(201).json({
+            mensagem: `Emprestimo ${data.accepted ? "aceito" : "rejeitado"}`
+        });
     } catch (error: any) {
-        return res.status(400).json({ error: error.message });
+        return res.status(error.status).json({ error: error.message });
     }
 }
 

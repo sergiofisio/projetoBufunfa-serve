@@ -5,36 +5,24 @@ import { Request, Response } from "express";
 export async function resetPassword(req: Request, res: Response) {
   try {
     const { password } = req.body;
-    const { email, recoveryToken } = req.query;
+    const { table, email, recoveryToken } = req.params
 
-    const userCEO = await prisma.ceo.findUnique({ where: { email } });
-    const userEmployee = await prisma.employee.findUnique({ where: { email } });
-
-    let findUser;
-    let table;
-
-    if (userCEO) {
-      table = "ceo";
-      findUser = userCEO;
-    } else if (userEmployee) {
-      table = "employee";
-      findUser = userEmployee;
-    }
+    const findUser = await prisma[table].findUnique({ where: { email } });
 
     if (!findUser) {
-      return res.status(400).json({ error: "Email not found" });
+      return res.status(400).json({ error: "Usuário não encontrado" });
     }
 
     if (!recoveryToken) {
-      return res.status(400).json({ message: "Token not found" });
+      return res.status(400).json({ message: "Token Inválido" });
     }
 
     if (findUser.recoveryPassword !== recoveryToken) {
-      return res.status(400).json({ error: "Invalid token" });
+      return res.status(400).json({ error: "Token Inválido" });
     }
 
     await createOrUpdate(
-      table as string,
+      table,
       { ...findUser, password, recoveryPassword: null },
       findUser.id
     );
@@ -46,7 +34,7 @@ export async function resetPassword(req: Request, res: Response) {
     //   },
     // });
 
-    return res.status(200).json({ message: "Password updated successfully" });
+    return res.status(200).json({ message: "Senha atualizada com sucesso" });
   } catch (error) {
     console.log(error);
     const { status, message } = handleError(error);

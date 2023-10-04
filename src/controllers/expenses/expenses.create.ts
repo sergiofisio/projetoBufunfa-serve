@@ -1,22 +1,23 @@
 import { createOrUpdate, findUnique } from "../../prismaFunctions/prisma";
 import { Request, Response } from "express";
+import { CustomError } from './../../class/class';
 
 const createExpense = async (req: Request, res: Response): Promise<any> => {
     const type = req.user?.type
     const data = req.body;
 
     try {
-        if (type !== "ceo") throw new Error("Você não tem permissão para esta funcionalidade");
+        if (type !== "ceo") throw new CustomError("Você não tem permissão para esta funcionalidade", 403);
         const findCompany = await findUnique("company", { id: data.companyId });
 
-        if (!findCompany) throw new Error("Empresa não encontrada");
+        if (!findCompany) throw new CustomError("Empresa não encontrada", 402);
         await createOrUpdate("expense", data);
 
         res.status(201).json({ mensagem: "Despesa criada com sucesso" });
     } catch (error: any) {
         console.log(error);
 
-        res.status(400).json({ error: error.message });
+        res.status(error.status).json({ error: error.message });
     }
 }
 

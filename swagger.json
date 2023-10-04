@@ -16,20 +16,27 @@
       "name": "all Users"
     },
     {
+      "name": "Ao ser adicionado à empresa"
+    },
+    {
       "name": "ceo only"
+    },
+    {
+      "name": "employee only"
     }
   ],
   "paths": {
     "/register/{table}": {
       "post": {
         "tags": ["all Users"],
-        "summary": "Registrar usuário",
+        "summary": "Registro de usuário",
+        "description": "Endpoint para registrar um novo usuário.",
         "parameters": [
           {
             "name": "table",
             "in": "path",
             "required": true,
-            "description": "Tabela do usuário (ceo ou employee)",
+            "description": "Tabela para registro (ceo ou employee).",
             "schema": {
               "type": "string"
             }
@@ -39,17 +46,32 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/User"
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "cpf": {
+                    "type": "string"
+                  }
+                },
+                "required": ["name", "email", "password", "cpf"]
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Usuário registrado com sucesso"
+            "description": "Usuário criado com sucesso."
           },
           "400": {
-            "description": "Requisição inválida"
+            "description": "Erro ao criar usuário."
           }
         }
       }
@@ -57,13 +79,14 @@
     "/login/{table}": {
       "post": {
         "tags": ["all Users"],
-        "summary": "Login do usuário",
+        "summary": "Login de usuário",
+        "description": "Endpoint para login de usuário.",
         "parameters": [
           {
             "name": "table",
             "in": "path",
             "required": true,
-            "description": "Tabela do usuário (ceo ou employee)",
+            "description": "Tabela para login (ceo ou employee).",
             "schema": {
               "type": "string"
             }
@@ -73,17 +96,26 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/User"
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "required": ["email", "password"]
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Login bem-sucedido"
+            "description": "Login bem-sucedido."
           },
           "400": {
-            "description": "Requisição inválida"
+            "description": "Erro ao fazer login."
           }
         }
       }
@@ -92,12 +124,13 @@
       "get": {
         "tags": ["all Users"],
         "summary": "Obter informações do usuário",
+        "description": "Endpoint para obter informações detalhadas do usuário.",
         "parameters": [
           {
             "name": "table",
             "in": "path",
             "required": true,
-            "description": "Tabela do usuário (ceo ou employee)",
+            "description": "Tabela para consulta (ceo ou employee).",
             "schema": {
               "type": "string"
             }
@@ -105,24 +138,30 @@
         ],
         "responses": {
           "200": {
-            "description": "Informações do usuário obtidas com sucesso"
+            "description": "Informações do usuário obtidas com sucesso."
           },
           "400": {
-            "description": "Requisição inválida"
+            "description": "Erro ao obter informações do usuário."
           }
-        }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
       }
     },
     "/task/{table}/{taskId}": {
       "get": {
         "tags": ["all Users"],
         "summary": "Obter informações da tarefa",
+        "description": "Endpoint para obter informações detalhadas de uma tarefa específica.",
         "parameters": [
           {
             "name": "table",
             "in": "path",
             "required": true,
-            "description": "Tabela do usuário (ceo ou employee)",
+            "description": "Tabela para consulta.",
             "schema": {
               "type": "string"
             }
@@ -131,7 +170,7 @@
             "name": "taskId",
             "in": "path",
             "required": true,
-            "description": "ID da tarefa",
+            "description": "ID da tarefa.",
             "schema": {
               "type": "integer"
             }
@@ -139,24 +178,30 @@
         ],
         "responses": {
           "200": {
-            "description": "Informações da tarefa obtidas com sucesso"
+            "description": "Informações da tarefa obtidas com sucesso."
           },
           "400": {
-            "description": "Requisição inválida"
+            "description": "Erro ao obter informações da tarefa."
           }
-        }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
       }
     },
     "/tasks/{table}": {
       "get": {
         "tags": ["all Users"],
         "summary": "Obter todas as tarefas",
+        "description": "Endpoint para obter uma lista de todas as tarefas.",
         "parameters": [
           {
             "name": "table",
             "in": "path",
             "required": true,
-            "description": "Tabela do usuário (ceo ou employee)",
+            "description": "Tabela para consulta.",
             "schema": {
               "type": "string"
             }
@@ -164,24 +209,110 @@
         ],
         "responses": {
           "200": {
-            "description": "Tarefas obtidas com sucesso"
+            "description": "Lista de tarefas obtida com sucesso."
           },
           "400": {
-            "description": "Requisição inválida"
+            "description": "Erro ao obter lista de tarefas."
           }
-        }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/companyInfo/{table}/{companyId}": {
+      "get": {
+        "tags": ["all Users"],
+        "summary": "Obter info empresa",
+        "description": "Endpoint para obter uma lista de todas as tarefas.",
+        "parameters": [
+          {
+            "name": "table",
+            "in": "path",
+            "required": true,
+            "description": "Tabela para consulta.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "description": "Id da empresa",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de tarefas obtida com sucesso."
+          },
+          "400": {
+            "description": "Erro ao obter lista de tarefas."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/employeeInfo/{table}/{employeeId}": {
+      "get": {
+        "tags": ["ceo"],
+        "summary": "Obter info empresa",
+        "description": "Endpoint para obter uma lista de todas as tarefas.",
+        "parameters": [
+          {
+            "name": "table",
+            "in": "path",
+            "required": true,
+            "description": "Tabela para consulta.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "employeeId",
+            "in": "path",
+            "required": true,
+            "description": "Id do funcionario",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de tarefas obtida com sucesso."
+          },
+          "400": {
+            "description": "Erro ao obter lista de tarefas."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
       }
     },
     "/upload/{table}": {
       "post": {
         "tags": ["all Users"],
         "summary": "Upload de imagem",
+        "description": "Endpoint para fazer upload de uma imagem.",
         "parameters": [
           {
             "name": "table",
             "in": "path",
             "required": true,
-            "description": "Tabela do usuário (ceo ou employee)",
+            "description": "Tabela para upload.",
             "schema": {
               "type": "string"
             }
@@ -195,43 +326,126 @@
                 "properties": {
                   "image": {
                     "type": "string",
-                    "format": "binary",
-                    "description": "Imagem para upload"
+                    "format": "binary"
                   }
-                }
+                },
+                "required": ["image"]
               }
             }
           }
         },
         "responses": {
-          "201": {
-            "description": "Upload de imagem bem-sucedido"
+          "200": {
+            "description": "Upload realizado com sucesso."
           },
           "400": {
-            "description": "Requisição inválida"
+            "description": "Erro ao fazer upload."
           }
-        }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
       }
     },
-    "/createTask/ceo": {
+    "/createCompany/ceo": {
       "post": {
         "tags": ["ceo only"],
-        "summary": "Criar tarefa",
+        "summary": "Criar empresa",
+        "description": "Endpoint para criar uma nova empresa",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Task"
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "nome da empresa"
+                  },
+                  "slogan": {
+                    "type": "string",
+                    "description": "Slogan da empresa"
+                  },
+                  "cnpj": {
+                    "type": "string",
+                    "description": "Descrição da empresa"
+                  },
+                  "logo": {
+                    "type": "string",
+                    "description": "logo empresa após upload"
+                  },
+                  "background": {
+                    "type": "string",
+                    "description": "background empresa após upload"
+                  }
+                },
+                "required": ["name", "cnpj"]
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Tarefa criada com sucesso"
+            "description": "Empresa criada com sucesso"
           },
           "400": {
-            "description": "Requisição inválida"
+            "description": "Ja existe uma empresa com esse CNPJ no nosso cadastro"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/createTask/ceo/{companyId}": {
+      "post": {
+        "tags": ["ceo only"],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Criar tarefa",
+        "description": "Endpoint para criar uma nova tarefa.",
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "description": "Tabela para upload.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                },
+                "required": ["title", "description"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Tarefa criada com sucesso."
+          },
+          "400": {
+            "description": "Erro ao criar tarefa."
           }
         }
       }
@@ -239,52 +453,158 @@
     "/createExpense/{table}": {
       "post": {
         "tags": ["ceo only"],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "summary": "Criar despesa",
+        "description": "Endpoint para criar uma nova despesa.",
         "parameters": [
           {
             "name": "table",
             "in": "path",
             "required": true,
-            "description": "Tabela do usuário (ceo ou employee)",
+            "description": "Tabela para criação de despesa.",
             "schema": {
               "type": "string"
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "description": "Valor da despesa."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Descrição da despesa."
+                  }
+                },
+                "required": ["value", "description"]
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
-            "description": "Despesa criada com sucesso"
+            "description": "Despesa criada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "mensagem": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           },
           "400": {
-            "description": "Requisição inválida"
+            "description": "Erro ao criar despesa.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
-    "/createLoan/ceo": {
+    "/createLoan/employee": {
       "post": {
-        "tags": ["all Users"],
+        "tags": ["employee only"],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "summary": "Criar empréstimo",
+        "description": "Endpoint para criar um novo empréstimo.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "description": "Valor do empréstimo."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Descrição do empréstimo."
+                  }
+                },
+                "required": ["value", "description"]
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
-            "description": "Empréstimo criado com sucesso"
+            "description": "Empréstimo criado com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "mensagem": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           },
           "400": {
-            "description": "Requisição inválida"
+            "description": "Erro ao criar empréstimo.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
-    "/takeTask/employee/employeeTasks": {
+    "/takeTask/employee/employeeTasks/{companyId}": {
       "post": {
-        "tags": ["all Users"],
-        "summary": "Pegar tarefa",
+        "tags": ["Ao ser adicionado à empresa"],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Assumir tarefa",
+        "description": "Endpoint para um funcionário assumir uma tarefa.",
         "parameters": [
           {
-            "name": "taskId",
+            "name": "companyId",
             "in": "path",
             "required": true,
-            "description": "ID da tarefa",
+            "description": "ID da tarefa a ser assumida.",
             "schema": {
               "type": "integer"
             }
@@ -292,133 +612,658 @@
         ],
         "responses": {
           "200": {
-            "description": "Tarefa adicionada com sucesso"
+            "description": "Tarefas adicionadas com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "mensagem": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           },
           "400": {
-            "description": "Requisição inválida"
+            "description": "Tarefas já cadastradas para este Funcionario",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
-    "/updateUser/:table": {
+    "/updateUser/{table}": {
       "put": {
         "tags": ["all Users"],
-        "summary": "Atualizar usuário",
+        "summary": "Atualizar informações do usuário",
+        "description": "Endpoint para atualizar informações do usuário. Pode ser passado um valor ou todos",
         "parameters": [
           {
             "name": "table",
             "in": "path",
             "required": true,
-            "description": "Tabela do usuário (ceo ou employee)",
+            "description": "Tabela do usuário a ser atualizado.",
             "schema": {
               "type": "string"
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Nome do usuário."
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "Email do usuário."
+                  },
+                  "cpf": {
+                    "type": "string",
+                    "description": "cpf do Usuario"
+                  },
+                  "photo": {
+                    "type": "string",
+                    "description": "url usuario após upload da foto"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "Senha do usuário."
+                  }
+                },
+                "required": ["name", "email", "password"]
+              }
+            }
+          }
+        },
         "responses": {
           "202": {
-            "description": "Usuário atualizado com sucesso"
+            "description": "Usuário atualizado com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "mensagem": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           },
           "400": {
-            "description": "Requisição inválida"
+            "description": "Erro ao atualizar usuário.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
-    "/updateTask/ceo/:id": {
+    "/updateTask/ceo/{id}": {
       "put": {
         "tags": ["ceo only"],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "summary": "Atualizar tarefa",
+        "description": "Endpoint para atualizar uma tarefa específica. Pode ser passado um valor ou todos",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "ID da tarefa",
+            "description": "ID da tarefa a ser atualizada.",
             "schema": {
               "type": "integer"
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "Título da tarefa."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Descrição da tarefa."
+                  },
+                  "vaue": {
+                    "type": "number",
+                    "description": "valor da tarefa em centavos"
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "202": {
-            "description": "Tarefa atualizada com sucesso"
+            "description": "Tarefa atualizada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "mensagem": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           },
           "400": {
-            "description": "Requisição inválida"
+            "description": "Erro ao atualizar tarefa.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
-    "/updateExpense/:table/:id": {
+    "/updateExpense/ceo/{id}": {
       "put": {
-        "tags": ["all Users"],
+        "tags": ["ceo only"],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "summary": "Atualizar despesa",
+        "description": "Endpoint para atualizar uma despesa específica. Pode ser passado um valor ou todos",
         "parameters": [
-          {
-            "name": "table",
-            "in": "path",
-            "required": true,
-            "description": "Tabela do usuário (ceo ou employee)",
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "ID da despesa",
+            "description": "ID da despesa a ser atualizada.",
             "schema": {
               "type": "integer"
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "Título da despesa."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Descrição da despesa."
+                  },
+                  "value": {
+                    "type": "number",
+                    "description": "valor da despesa em centavos"
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "tipo da despesa (fixa ou variável)"
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
-          "201": {
-            "description": "Despesa atualizada com sucesso"
+          "202": {
+            "description": "Despesa atualizada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "mensagem": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           },
           "400": {
-            "description": "Requisição inválida"
+            "description": "Erro ao atualizar uma despesa.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
-    "/acceptLoan/ceo/:id": {
+    "/acceptLoan/ceo/{id}": {
       "put": {
         "tags": ["ceo only"],
-        "summary": "Aceitar empréstimo",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "aceitar ou rejeitar emprestimo de funcionario",
+        "description": "Endpoint para o ceo aceite ou rejeite um emprestimo pedido pelo funcionario.",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "ID do empréstimo",
+            "description": "ID do pedido de emprestimo a ser atualizada.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "accepted": {
+                    "type": "boolean",
+                    "description": "aceite dado pelo ceo, pode ser true ou false"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Emprestimo aceito/rejeitado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "mensagem": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Você não tem acesso a esta funcionalidade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hireEmployee/ceo/{employeeId}/{companyId}": {
+      "put": {
+        "tags": ["ceo only"],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "contratar funcionario",
+        "description": "Endpoint para o ceo contratar o funcionario para uma empresa",
+        "parameters": [
+          {
+            "name": "employeeId",
+            "in": "path",
+            "required": true,
+            "description": "ID do funcionario a ser contratado",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "description": "ID da empresa que vai contratar o funcionario",
             "schema": {
               "type": "integer"
             }
           }
         ],
         "responses": {
-          "201": {
-            "description": "Empréstimo aceito"
+          "202": {
+            "description": "Funcionario contratado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "mensagem": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           },
           "400": {
-            "description": "Requisição inválida"
+            "description": "Este funcionário já está contratado na empresa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Você não tem acesso a esta funcionalidade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
-    "/deleteTask/ceo/:id": {
+    "/updateCompany/ceo/{companyId}": {
+      "put": {
+        "tags": ["ceo only"],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Atualizar despesa",
+        "description": "Endpoint para atualizar uma empresa específica. Pode ser passado um valor ou todos",
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "description": "ID da empresa a ser atualizada.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Título da despesa."
+                  },
+                  "slogan": {
+                    "type": "string",
+                    "description": "slogan da despesa."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Descrição da despesa."
+                  },
+                  "cnpj": {
+                    "type": "string",
+                    "description": "cnpj da despesa."
+                  },
+                  "logo": {
+                    "type": "string",
+                    "description": "logo da despesa."
+                  },
+                  "background": {
+                    "type": "string",
+                    "description": "background da despesa."
+                  },
+                  "salary": {
+                    "type": "number",
+                    "description": "valor da despesa em centavos"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Despesa atualizada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "mensagem": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Empresa não encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Você não tem permissão para esta funcionalidade!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/addCeo/ceo/{companyId}": {
+      "put": {
+        "tags": ["ceo only"],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Atualizar despesa",
+        "description": "Endpoint para atualizar uma empresa específica. Pode ser passado um valor ou todos",
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "description": "ID da empresa a ser atualizada.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "email do ceo que vai ser adicionado"
+                  },
+                  "companyName": {
+                    "type": "string",
+                    "description": "nome da empresa."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Ceo adicionado à empresa ${companyName} com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "mensagem": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Este ceo já está adicionado à empresa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Usuário não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Você não tem permissão para esta funcionalidade!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deleteTask/ceo/{id}": {
       "delete": {
         "tags": ["ceo only"],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "summary": "Deletar tarefa",
+        "description": "Endpoint para deletar uma tarefa específica.",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "ID da tarefa",
+            "description": "ID da tarefa a ser deletada.",
             "schema": {
               "type": "integer"
             }
@@ -426,24 +1271,54 @@
         ],
         "responses": {
           "202": {
-            "description": "Tarefa deletada com sucesso"
+            "description": "Tarefa deletada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "mensagem": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           },
           "400": {
-            "description": "Requisição inválida"
+            "description": "Erro ao deletar tarefa.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
-    "/deleteExpense/:table/:id": {
+    "/deleteExpense/ceo/{id}": {
       "delete": {
-        "tags": ["all Users"],
+        "tags": ["ceo only"],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "summary": "Deletar despesa",
+        "description": "Endpoint para deletar uma despesa específica.",
         "parameters": [
           {
             "name": "table",
             "in": "path",
             "required": true,
-            "description": "Tabela do usuário (ceo ou employee)",
+            "description": "Tabela da despesa a ser deletada.",
             "schema": {
               "type": "string"
             }
@@ -452,7 +1327,7 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "ID da despesa",
+            "description": "ID da despesa a ser deletada.",
             "schema": {
               "type": "integer"
             }
@@ -460,110 +1335,100 @@
         ],
         "responses": {
           "202": {
-            "description": "Despesa deletada com sucesso"
+            "description": "Despesa deletada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "mensagem": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           },
           "400": {
-            "description": "Requisição inválida"
+            "description": "Erro ao deletar despesa.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
-    "/deleteTask/employee/employeeTasks/:taskId": {
+    "/deleteLoan/ceo/{id}": {
       "delete": {
-        "tags": ["all Users"],
-        "summary": "Deletar tarefa do funcionário",
-        "parameters": [
+        "tags": ["ceo only"],
+        "security": [
           {
-            "name": "taskId",
-            "in": "path",
-            "required": true,
-            "description": "ID da tarefa",
-            "schema": {
-              "type": "integer"
-            }
+            "BearerAuth": []
           }
         ],
-        "responses": {
-          "202": {
-            "description": "Tarefa deletada com sucesso"
-          },
-          "400": {
-            "description": "Requisição inválida"
-          }
-        }
-      }
-    },
-    "/deleteLoan/:table/:id": {
-      "delete": {
-        "tags": ["all Users"],
         "summary": "Deletar empréstimo",
+        "description": "Endpoint para deletar um empréstimo específico.",
         "parameters": [
-          {
-            "name": "table",
-            "in": "path",
-            "required": true,
-            "description": "Tabela do usuário (ceo ou employee)",
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "ID do empréstimo",
+            "description": "ID do empréstimo a ser deletado.",
             "schema": {
               "type": "integer"
             }
           }
         ],
         "responses": {
-          "201": {
-            "description": "Empréstimo deletado com sucesso"
+          "202": {
+            "description": "Empréstimo deletado com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "mensagem": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           },
           "400": {
-            "description": "Requisição inválida"
+            "description": "Erro ao deletar empréstimo.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
     }
   },
   "components": {
-    "schemas": {
-      "User": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "Nome do usuário"
-          },
-          "email": {
-            "type": "string",
-            "description": "Email do usuário"
-          },
-          "password": {
-            "type": "string",
-            "description": "Senha do usuário"
-          }
-        }
-      },
-      "Task": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string",
-            "description": "Título da tarefa"
-          },
-          "description": {
-            "type": "string",
-            "description": "Descrição da tarefa"
-          },
-          "dueDate": {
-            "type": "string",
-            "format": "date",
-            "description": "Data de vencimento da tarefa"
-          }
-        }
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }

@@ -1,6 +1,7 @@
 import { deleteProperties } from "../../utils/functions";
 import { findUnique } from "../../prismaFunctions/prisma";
 import { Request, Response } from "express";
+import { CustomError } from './../../class/class';
 
 const getUserInfo = async (req: Request, res: Response): Promise<any> => {
     const { table } = req.params;
@@ -45,21 +46,20 @@ const getUserInfo = async (req: Request, res: Response): Promise<any> => {
         }
 
         if (user.type === 'employee' && user.type !== table) {
-            throw new Error('Você não tem acesso a este recurso');
+            throw new CustomError('Você não tem acesso a este recurso', 403);
         }
 
         delete user.password;
         delete user.recoveryPassword;
 
         if (!user) {
-            throw new Error('Usuario não encontrado');
+            throw new CustomError('Usuario não encontrado', 401);
         }
 
         res.status(200).json({ [table]: user });
     } catch (error: any) {
-        console.log(error);
 
-        res.status(400).json({ error: error.message });
+        res.status(error.statuss).json({ error: error.message });
     }
 };
 
