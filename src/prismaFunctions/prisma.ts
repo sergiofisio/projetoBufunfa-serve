@@ -66,11 +66,11 @@ export async function findMany(table: string, includes?: includes) {
  * @returns O registro criado ou atualizado.
  */
 
-export async function createOrUpdate(table: string, data: any, id?: number) {
+export async function createOrUpdate(table: string, data: any, id?: number | string) {
 
   if (id) {
     return await prisma[table].update({
-      where: { id },
+      where: { id: Number(id) },
       data: { ...data },
     });
   }
