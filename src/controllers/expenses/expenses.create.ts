@@ -4,11 +4,12 @@ import { CustomError } from './../../class/class';
 
 const createExpense = async (req: Request, res: Response): Promise<any> => {
     const type = req.user?.type
+    const { companyId } = req.params
     const data = req.body;
 
     try {
         if (type !== "ceo") throw new CustomError("Você não tem permissão para esta funcionalidade", 403);
-        const findCompany = await findUnique("company", { id: data.companyId });
+        const findCompany = await findUnique("company", { id: companyId });
 
         if (!findCompany) throw new CustomError("Empresa não encontrada", 402);
         await createOrUpdate("expense", data);
