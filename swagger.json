@@ -157,29 +157,43 @@
     "/resetPassword/{table}/{email}/{recoveryToken}": {
       "post": {
         "tags": ["all Users"],
-        "summary": "Reset da senha",
+        "summary": "refazer a senha perdida",
         "description": "Endpoint para refazer a senha perdida",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string"
-                  }
-                },
-                "required": ["email"]
-              }
+        "parameters": [
+          {
+            "name": "table",
+            "in": "path",
+            "required": true,
+            "description": "Tabela para refazer (ceo ou employee) vai vir pelo link enviado no email.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "description": "email do usuario, vai vir ja preenchido no link enviado no email.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recoveryToken",
+            "in": "path",
+            "required": true,
+            "description": "token de recuperação de senha do usuario, vai vir ja preenchido no link enviado no email.",
+            "schema": {
+              "type": "string"
             }
           }
-        },
+        ],
         "responses": {
           "200": {
-            "description": "Email enviado com sucesso"
+            "description": "Senha atualizada com sucesso"
           },
           "400": {
-            "description": "Email não encontrado"
+            "description": "Usuário não encontrado"
           }
         }
       }
