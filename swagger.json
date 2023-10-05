@@ -9,6 +9,10 @@
     {
       "url": "http://localhost:4000",
       "description": "Servidor local"
+    },
+    {
+      "url": "https://bufunfa.onrender.com",
+      "description": "Servidor deploy"
     }
   ],
   "tags": [
