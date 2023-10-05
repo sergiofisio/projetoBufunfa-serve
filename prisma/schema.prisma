@@ -18,9 +18,9 @@ model company {
   salary           Int?       @default(0)
   ceos             companyCeos[]
   companyEmployees companyEmployees[]
-  tasks            employeeTasks[]
-  expenses         employeeExpenses[]
-  loans            employeeLoans[]
+  tasks            task[]
+  expenses         expense[]
+  loans            loan[]
 }
 
 model companyCeos{
@@ -72,6 +72,8 @@ model task {
   title         String
   description   String?
   value         Int
+  companyId     Int?
+  company       company?        @relation(fields: [companyId], references: [id])
   employeeTasks employeeTasks[]
 }
 
@@ -83,8 +85,6 @@ model employeeTasks {
   task       task?      @relation(fields: [taskId], references: [id])
   statusTaskId Int     @default(1)
   statusTask    statusTask      @relation(fields: [statusTaskId], references: [id])
-  companyId     Int?
-  company       company?        @relation(fields: [companyId], references: [id])
 }
 
 model statusTask {
@@ -99,6 +99,8 @@ model expense {
   description     String?
   value           Int
   type            String
+  companyId       Int?
+  company         company?      @relation(fields: [companyId], references: [id])
   employeeExpensese employeeExpenses[]
 }
 
@@ -110,8 +112,6 @@ model employeeExpenses{
   expense    expense   @relation(fields: [expenseId], references: [id])
   statusExpenseId Int     @default(1)
   statusExpense    statusExpense      @relation(fields: [statusExpenseId], references: [id])
-  companyId  Int
-  company    company?   @relation(fields: [companyId], references: [id])
 }
 
 model statusExpense {
@@ -126,6 +126,8 @@ model loan {
   dueDate          Int
   interestRate     Int
   value            Int
+  companyId        Int?
+  company          company? @relation(fields: [companyId], references: [id])
   employeeLoans    employeeLoans[]
 }
 
@@ -135,7 +137,5 @@ model employeeLoans{
   employee   employee? @relation(fields: [employeeId], references: [id])
   loanId     Int?
   loan       loan?      @relation(fields: [loanId], references: [id])
-  companyId  Int?
-  company    company?   @relation(fields: [companyId], references: [id])
   accepted   Boolean?  
 }

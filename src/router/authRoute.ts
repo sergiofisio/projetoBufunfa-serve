@@ -4,7 +4,7 @@ const { deleteTask } = require("../controllers/task/task.delete");
 const { update } = require("../controllers/user/user.update");
 const { takeTask } = require('../controllers/employee/employee.task')
 const { getUserInfo } = require("../controllers/user/user.info");
-const { getTaskInfo, getAllTasks } = require("../controllers/task/tasks");
+const { getFunctionInfo, getFunctionAllInfo } = require("../controllers/company/company.functions");
 const { createExpense } = require("../controllers/expenses/expenses.create")
 const { updateExpense } = require("../controllers/expenses/expenses.update")
 const { deleteExpense } = require("../controllers/expenses/expenses.delete")
@@ -23,8 +23,8 @@ const { uploadImg } = require("../controllers/upload");
 const multer = require("../middleware/multer");
 
 route.get("/userInfo/:table", getUserInfo)
-route.get('/task/:table/:taskId', getTaskInfo)
-route.get('/tasks/:table', getAllTasks)
+route.get('/functionInfo/:table/:companyFunction/:id', getFunctionInfo)
+route.get('/allFunctionInfo/:table/:companyFunction', getFunctionAllInfo)
 route.get('/companyInfo/:table/:companyId', companyInfo)
 route.get('/employeeInfo/:table/:employeeId', employeeInfo)
 route.post("/upload/:table", multer.single("image"), uploadImg)

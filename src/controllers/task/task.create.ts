@@ -23,6 +23,7 @@ async function createTask(req: Request, res: Response): Promise<any> {
         res.status(201).json({ mensagem: "Tarefa criada com sucesso" });
 
     } catch (error: any) {
+        console.log(error);
 
         res.status(error.status).json({ mensagem: error.message });
 

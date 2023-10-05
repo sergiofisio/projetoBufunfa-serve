@@ -151,6 +151,95 @@
         ]
       }
     },
+    "/functionInfo/{table}/{companyFunction}/{id}": {
+      "get": {
+        "tags": ["all Users"],
+        "summary": "Obter informações do usuário",
+        "description": "Endpoint para obter informações detalhadas do usuário.",
+        "parameters": [
+          {
+            "name": "table",
+            "in": "path",
+            "required": true,
+            "description": "Tabela para consulta (ceo ou employee).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "companyFunction",
+            "in": "path",
+            "required": true,
+            "description": "Função a ser verificada (task, loan ou expense)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "id da função que quer as informações",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso"
+          },
+          "400": {
+            "description": "companyFunction não encontradas"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/allFunctionInfo/{table}/{companyFunction}": {
+      "get": {
+        "tags": ["all Users"],
+        "summary": "Obter informações do usuário",
+        "description": "Endpoint para obter informações detalhadas do usuário.",
+        "parameters": [
+          {
+            "name": "table",
+            "in": "path",
+            "required": true,
+            "description": "Tabela para consulta (ceo ou employee).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "companyFunction",
+            "in": "path",
+            "required": true,
+            "description": "Função a ser verificada (task, loan ou expense)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Informações do usuário obtidas com sucesso."
+          },
+          "400": {
+            "description": "Erro ao obter informações do usuário."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
     "/task/{table}/{taskId}": {
       "get": {
         "tags": ["all Users"],

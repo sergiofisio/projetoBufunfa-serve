@@ -14,9 +14,9 @@ const companyInfo = async (req: Request, res: Response): Promise<any> => {
             companyEmployees: {
                 include: { employee: true }
             },
-            tasks: { include: { task: true } },
-            expenses: { include: { expense: true } },
-            loans: { include: { loan: true } }
+            tasks: true,
+            expenses: true,
+            loans: true
         });
 
         if (company.ceos.length)
