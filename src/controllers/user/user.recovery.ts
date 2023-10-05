@@ -28,7 +28,7 @@ export const sendRecoveryEmail = async (req: Request, res: Response) => {
     }
 
     if (!userCEO && !userEmployee) {
-      throw new CustomError("Email not found", 400);
+      throw new CustomError("Email não encontrado", 400);
     }
 
     const token = generateResetToken(email);
@@ -42,7 +42,7 @@ export const sendRecoveryEmail = async (req: Request, res: Response) => {
 
     await sendPasswordResetEmail(email, token);
 
-    return res.status(200).json({ message: "Email sent successfully" });
+    return res.status(200).json({ message: "Email enviado com sucesso" });
   } catch (error: any) {
     return res.status(error.status).json({ message: error.message });
   }

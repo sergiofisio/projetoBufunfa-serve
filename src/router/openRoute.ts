@@ -20,6 +20,6 @@ route.get("", (req: Request, res: Response) => {
 route.post('/recovery', sendRecoveryEmail)
 route.post("/register/:table", register);
 route.post("/login/:table", login)
-route.put('/resetPassword/:table/:email/recoveryToken', resetPassword)
+route.put('/resetPassword/:table/:email/:recoveryToken', resetPassword)
 
 module.exports = route;

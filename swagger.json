@@ -124,6 +124,66 @@
         }
       }
     },
+    "/recovery": {
+      "post": {
+        "tags": ["all Users"],
+        "summary": "recuperar a senha",
+        "description": "Endpoint para fazer recuperação da senha.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  }
+                },
+                "required": ["email"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Email com reset de senha enviado com sucesso"
+          },
+          "400": {
+            "description": "Email não encontrado"
+          }
+        }
+      }
+    },
+    "/resetPassword/{table}/{email}/{recoveryToken}": {
+      "post": {
+        "tags": ["all Users"],
+        "summary": "Reset da senha",
+        "description": "Endpoint para refazer a senha perdida",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  }
+                },
+                "required": ["email"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Email enviado com sucesso"
+          },
+          "400": {
+            "description": "Email não encontrado"
+          }
+        }
+      }
+    },
     "/userInfo/{table}": {
       "get": {
         "tags": ["all Users"],

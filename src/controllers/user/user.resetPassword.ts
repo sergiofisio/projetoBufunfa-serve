@@ -1,6 +1,6 @@
-import { handleError } from "../../utils/zodErrorHandler";
 import { createOrUpdate, prisma } from "../../prismaFunctions/prisma";
 import { Request, Response } from "express";
+import { CustomError } from './../../class/class';
 
 export async function resetPassword(req: Request, res: Response) {
   try {
@@ -10,15 +10,15 @@ export async function resetPassword(req: Request, res: Response) {
     const findUser = await prisma[table].findUnique({ where: { email } });
 
     if (!findUser) {
-      return res.status(400).json({ error: "Usuário não encontrado" });
+      throw new CustomError("Usuário não encontrado", 400);
     }
 
     if (!recoveryToken) {
-      return res.status(400).json({ message: "Token Inválido" });
+      throw new CustomError("Token Inválido", 402);
     }
 
     if (findUser.recoveryPassword !== recoveryToken) {
-      return res.status(400).json({ error: "Token Inválido" });
+      throw new CustomError("Token Inválido", 402);
     }
 
     await createOrUpdate(
@@ -35,9 +35,7 @@ export async function resetPassword(req: Request, res: Response) {
     // });
 
     return res.status(200).json({ message: "Senha atualizada com sucesso" });
-  } catch (error) {
-    console.log(error);
-    const { status, message } = handleError(error);
-    return res.status(status).json({ message });
+  } catch (error: any) {
+    return res.status(error.status).json({ message: error.messag });
   }
 }
