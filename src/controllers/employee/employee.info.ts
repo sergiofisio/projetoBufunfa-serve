@@ -11,7 +11,7 @@ const employeeInfo = async (req: Request, res: Response): Promise<any> => {
 
         const employeeInfo = await findUnique("employee", { id: Number(employeeId) }, {
             company: { include: { company: true } },
-            tasks: { include: { task: true } },
+            tasks: { include: { task: { include: { companyTasks: true } } } },
             expenses: {
                 include: {
                     expense: true
@@ -30,7 +30,6 @@ const employeeInfo = async (req: Request, res: Response): Promise<any> => {
         res.json({ employeeInfo });
 
     } catch (error: any) {
-
         res.status(error.status).json({ error: error.message });
 
     }

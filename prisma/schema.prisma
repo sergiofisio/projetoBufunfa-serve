@@ -18,9 +18,9 @@ model company {
   salary           Int?       @default(0)
   ceos             companyCeos[]
   companyEmployees companyEmployees[]
-  tasks            task[]
-  expenses         expense[]
-  loans            loan[]
+  tasks            companyTasks[]
+  expenses         companyExpenses[]
+  loans            companyLoans[]
 }
 
 model companyCeos{
@@ -38,6 +38,27 @@ model companyEmployees{
   companyId Int?
   company company? @relation(fields: [companyId], references: [id])
   salary    Int @default(0)
+}
+model companyTasks{
+  id  Int @id @default(autoincrement())
+  taskId Int?
+  task task? @relation(fields: [taskId], references: [id])
+  companyId Int?
+  company company? @relation(fields: [companyId], references: [id])
+}
+model companyExpenses{
+  id  Int @id @default(autoincrement())
+  expenseId Int?
+  expense expense? @relation(fields: [expenseId], references: [id])
+  companyId Int?
+  company company? @relation(fields: [companyId], references: [id])
+}
+model companyLoans{
+  id  Int @id @default(autoincrement())
+  loanId Int?
+  loan loan? @relation(fields: [loanId], references: [id])
+  companyId Int?
+  company company? @relation(fields: [companyId], references: [id])
 }
 
 model ceo {
@@ -72,8 +93,7 @@ model task {
   title         String
   description   String?
   value         Int
-  companyId     Int?
-  company       company?        @relation(fields: [companyId], references: [id])
+  companyTasks  companyTasks[]
   employeeTasks employeeTasks[]
 }
 
@@ -99,8 +119,7 @@ model expense {
   description     String?
   value           Int
   type            String
-  companyId       Int?
-  company         company?      @relation(fields: [companyId], references: [id])
+  companyExpenses companyExpenses[]
   employeeExpensese employeeExpenses[]
 }
 
@@ -126,8 +145,7 @@ model loan {
   dueDate          Int
   interestRate     Int
   value            Int
-  companyId        Int?
-  company          company? @relation(fields: [companyId], references: [id])
+  companyLoans     companyLoans[]
   employeeLoans    employeeLoans[]
 }
 

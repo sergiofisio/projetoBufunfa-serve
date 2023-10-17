@@ -7,7 +7,7 @@ const takeTask = async (req: Request, res: Response): Promise<any> => {
     const { companyId } = req.params;
 
     try {
-        const allTasks = await findMany('task');
+        const allTasks = await findMany('companyTasks');
 
         if (!allTasks.length) throw new CustomError("Não há tarefas cadastradas", 404);
 
@@ -22,7 +22,7 @@ const takeTask = async (req: Request, res: Response): Promise<any> => {
             if (taskInTasks) {
                 return;
             } else {
-                await createOrUpdate('employeeTasks', { taskId: task.id, employeeId: Number(id) });
+                await createOrUpdate('employeeTasks', { taskId: task.taskId, employeeId: Number(id) });
                 taskAdded = true;
             }
         }));
@@ -36,6 +36,8 @@ const takeTask = async (req: Request, res: Response): Promise<any> => {
         return res.status(200).json({ mensagem: message });
 
     } catch (error: any) {
+        console.log(error);
+
         return res.status(error.status).json({ error: error.message });
     }
 }
