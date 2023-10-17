@@ -32,6 +32,33 @@ CREATE TABLE "companyEmployees" (
 );
 
 -- CreateTable
+CREATE TABLE "companyTasks" (
+    "id" SERIAL NOT NULL,
+    "taskId" INTEGER,
+    "companyId" INTEGER,
+
+    CONSTRAINT "companyTasks_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "companyExpenses" (
+    "id" SERIAL NOT NULL,
+    "expenseId" INTEGER,
+    "companyId" INTEGER,
+
+    CONSTRAINT "companyExpenses_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "companyLoans" (
+    "id" SERIAL NOT NULL,
+    "loanId" INTEGER,
+    "companyId" INTEGER,
+
+    CONSTRAINT "companyLoans_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "ceo" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
@@ -65,7 +92,6 @@ CREATE TABLE "task" (
     "title" TEXT NOT NULL,
     "description" TEXT,
     "value" INTEGER NOT NULL,
-    "companyId" INTEGER,
 
     CONSTRAINT "task_pkey" PRIMARY KEY ("id")
 );
@@ -95,7 +121,6 @@ CREATE TABLE "expense" (
     "description" TEXT,
     "value" INTEGER NOT NULL,
     "type" TEXT NOT NULL,
-    "companyId" INTEGER,
 
     CONSTRAINT "expense_pkey" PRIMARY KEY ("id")
 );
@@ -125,7 +150,6 @@ CREATE TABLE "loan" (
     "dueDate" INTEGER NOT NULL,
     "interestRate" INTEGER NOT NULL,
     "value" INTEGER NOT NULL,
-    "companyId" INTEGER,
 
     CONSTRAINT "loan_pkey" PRIMARY KEY ("id")
 );
@@ -174,7 +198,22 @@ ALTER TABLE "companyEmployees" ADD CONSTRAINT "companyEmployees_employeeId_fkey"
 ALTER TABLE "companyEmployees" ADD CONSTRAINT "companyEmployees_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "company"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "task" ADD CONSTRAINT "task_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "company"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "companyTasks" ADD CONSTRAINT "companyTasks_taskId_fkey" FOREIGN KEY ("taskId") REFERENCES "task"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "companyTasks" ADD CONSTRAINT "companyTasks_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "company"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "companyExpenses" ADD CONSTRAINT "companyExpenses_expenseId_fkey" FOREIGN KEY ("expenseId") REFERENCES "expense"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "companyExpenses" ADD CONSTRAINT "companyExpenses_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "company"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "companyLoans" ADD CONSTRAINT "companyLoans_loanId_fkey" FOREIGN KEY ("loanId") REFERENCES "loan"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "companyLoans" ADD CONSTRAINT "companyLoans_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "company"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "employeeTasks" ADD CONSTRAINT "employeeTasks_employeeId_fkey" FOREIGN KEY ("employeeId") REFERENCES "employee"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -186,9 +225,6 @@ ALTER TABLE "employeeTasks" ADD CONSTRAINT "employeeTasks_taskId_fkey" FOREIGN K
 ALTER TABLE "employeeTasks" ADD CONSTRAINT "employeeTasks_statusTaskId_fkey" FOREIGN KEY ("statusTaskId") REFERENCES "statusTask"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "expense" ADD CONSTRAINT "expense_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "company"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "employeeExpenses" ADD CONSTRAINT "employeeExpenses_employeeId_fkey" FOREIGN KEY ("employeeId") REFERENCES "employee"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -196,9 +232,6 @@ ALTER TABLE "employeeExpenses" ADD CONSTRAINT "employeeExpenses_expenseId_fkey" 
 
 -- AddForeignKey
 ALTER TABLE "employeeExpenses" ADD CONSTRAINT "employeeExpenses_statusExpenseId_fkey" FOREIGN KEY ("statusExpenseId") REFERENCES "statusExpense"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "loan" ADD CONSTRAINT "loan_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "company"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "employeeLoans" ADD CONSTRAINT "employeeLoans_employeeId_fkey" FOREIGN KEY ("employeeId") REFERENCES "employee"("id") ON DELETE SET NULL ON UPDATE CASCADE;

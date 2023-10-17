@@ -16,9 +16,10 @@ class includes {
       task: boolean;
     };
   };
-  tasks?: boolean | { include: { task: boolean } };
+  tasks?: boolean | { include: { task: boolean | { include: { companyTasks: boolean } } } };
   expenses?: boolean | { include: { expense: boolean } };
   loans?: boolean | { include: { loan: boolean } }
+  where?: any
 }
 
 /**
@@ -67,6 +68,7 @@ export async function findMany(table: string, includes?: includes) {
  */
 
 export async function createOrUpdate(table: string, data: any, id?: number | string) {
+
 
   if (id) {
     return await prisma[table].update({
