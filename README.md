@@ -38,3 +38,16 @@ Essa é a rota para registrar novo usuario.
   "message": "Erro ao criar usuario"
 }
 ```
+
+## Deploy
+
+Link deploy da API <https://bufunfa.onrender.com>
+
+
+## Tecnologias
+
+Para essa aplicação foram utilizadas as seguintes tecnologias
+
+[![My Skills](https://skillicons.dev/icons?i=prisma,ts,express,aws,)](https://skillicons.dev)
+          
+          
