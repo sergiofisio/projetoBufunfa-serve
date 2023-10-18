@@ -15,7 +15,7 @@ Essa é a rota para registrar novo usuario.
 
 #####  EX. Requisição
 
-```javascript
+```typescript
 {
   "name": "Andre Cardoso",
   "email": "andrecardoso@email.com",
@@ -26,13 +26,13 @@ Essa é a rota para registrar novo usuario.
 ```
 #####  Respostas
 
-```javascript
+```typescript
 // HTTP Status 201
 {
   "message": "Usuario criado com sucesso"
 }
 ```
-```javascript
+```typescript
 // HTTP Status 400
 {
   "message": "Erro ao criar usuario"
