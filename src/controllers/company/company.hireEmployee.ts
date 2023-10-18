@@ -7,9 +7,7 @@ const hireEmployee = async (req: Request, res: Response): Promise<any> => {
     const type = req.user?.type;
 
     try {
-        if (type !== "ceo") {
-            throw new CustomError("Você não tem acesso a esta funcionalidade", 403);
-        }
+        if (type !== "ceo") throw new CustomError("Você não tem acesso a esta funcionalidade", 403);
 
         const findEmployeeInCompany = await findFirst("companyEmployees", { employeeId: Number(employeeId), companyId: Number(companyId) });
 
@@ -19,7 +17,6 @@ const hireEmployee = async (req: Request, res: Response): Promise<any> => {
 
         const updateEmployee = await createOrUpdate("companyEmployees", { employeeId: Number(employeeId), companyId: Number(companyId) });
 
-        console.log({ updateEmployee });
         res.json({ mensagem: "Funcionario contratado com sucesso" });
     } catch (error: any) {
         res.status(error.status).json({ error: error.message });
