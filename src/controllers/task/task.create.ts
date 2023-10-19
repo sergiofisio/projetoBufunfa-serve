@@ -15,13 +15,16 @@ async function createTask(req: Request, res: Response): Promise<any> {
             ]
         });
 
-        const findTaskInCompany = await findFirst("companyTasks", {
-            AND: [
-                { taskId: Number(findTask.id), companyId: Number(companyId) }
-            ]
-        })
+        if (findTask) {
 
-        if (findTaskInCompany) throw new CustomError("Tarefa ja foi criada", 401);
+            const findTaskInCompany = await findFirst("companyTasks", {
+                AND: [
+                    { taskId: Number(findTask.id), companyId: Number(companyId) }
+                ]
+            })
+
+            if (findTaskInCompany) throw new CustomError("Tarefa ja foi criada", 401);
+        }
 
         const task = await createOrUpdate("task", data);
 
