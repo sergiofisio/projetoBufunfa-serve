@@ -11,9 +11,6 @@ const deleteEmployee = async (req: Request, res: Response): Promise<any> => {
   const { employeeId, companyId } = req.params;
   const type = req.user?.type;
 
-  console.log({ employeeId, companyId });
-
-
   try {
     if (type !== "ceo")
       throw new CustomError("Não tem permissão para esta funcionalidade", 403);

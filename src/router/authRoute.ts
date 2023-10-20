@@ -44,7 +44,7 @@ route.put('/hireEmployee/ceo/:employeeId/:companyId', hireEmployee)
 route.put('/updateCompany/ceo/:companyId', updateCompany)
 route.put('/addCeo/ceo/:companyId', addCeo)
 route.delete('/deleteEmployee/ceo/:employeeId/:companyId', deleteEmployee)
-route.delete('/deleteTask/ceo/:id', deleteTask)
+route.delete('/deleteTask/ceo/:id/:companyId', deleteTask)
 route.delete('/deleteExpense/ceo/:id', deleteExpense)
 route.delete('/deleteLoan/ceo/:id', deleteLoan)
 
