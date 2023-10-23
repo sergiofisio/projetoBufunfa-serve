@@ -118,6 +118,7 @@ model expense {
   title           String
   description     String?
   value           Int
+  date            BigInt?
   type            String
   companyExpenses companyExpenses[]
   employeeExpensese employeeExpenses[]
@@ -142,7 +143,7 @@ model statusExpense {
 model loan {
   id               Int      @id @default(autoincrement())
   description      String
-  dueDate          Int
+  dueDate          BigInt
   interestRate     Int
   value            Int
   companyLoans     companyLoans[]

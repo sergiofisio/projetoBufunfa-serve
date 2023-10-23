@@ -13,6 +13,9 @@ const createExpense = async (req: Request, res: Response): Promise<any> => {
 
         if (!findCompany) throw new CustomError("Empresa não encontrada", 402);
 
+        console.log(data);
+
+
         const expense = await createOrUpdate("expense", data);
 
         await createOrUpdate("companyExpenses", { expenseId: expense.id, companyId: Number(companyId) });
