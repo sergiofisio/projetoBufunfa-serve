@@ -120,6 +120,7 @@ CREATE TABLE "expense" (
     "title" TEXT NOT NULL,
     "description" TEXT,
     "value" INTEGER NOT NULL,
+    "date" TEXT,
     "type" TEXT NOT NULL,
 
     CONSTRAINT "expense_pkey" PRIMARY KEY ("id")
@@ -147,7 +148,7 @@ CREATE TABLE "statusExpense" (
 CREATE TABLE "loan" (
     "id" SERIAL NOT NULL,
     "description" TEXT NOT NULL,
-    "dueDate" INTEGER NOT NULL,
+    "dueDate" TEXT NOT NULL,
     "interestRate" INTEGER NOT NULL,
     "value" INTEGER NOT NULL,
 
