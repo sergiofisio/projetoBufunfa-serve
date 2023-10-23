@@ -6,6 +6,9 @@ const hireEmployee = async (req: Request, res: Response): Promise<any> => {
     const { employeeId, companyId } = req.params;
     const type = req.user?.type;
 
+    console.log({ employeeId, companyId });
+
+
     try {
         if (type !== "ceo") throw new CustomError("Você não tem acesso a esta funcionalidade", 403);
 

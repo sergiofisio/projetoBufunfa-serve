@@ -13,10 +13,10 @@ const createExpense = async (req: Request, res: Response): Promise<any> => {
 
         if (!findCompany) throw new CustomError("Empresa não encontrada", 402);
 
-        console.log(data);
+        const [day, month, year] = data.date.split("/");
+        const timestampDate = new Date(Number(year), Number(month) - 1, Number(day)).getTime();;
 
-
-        const expense = await createOrUpdate("expense", data);
+        const expense = await createOrUpdate("expense", { ...data, date: String(data.date) });
 
         await createOrUpdate("companyExpenses", { expenseId: expense.id, companyId: Number(companyId) });
 
