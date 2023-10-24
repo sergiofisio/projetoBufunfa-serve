@@ -6,15 +6,13 @@ import { CustomError } from './../../class/class';
 const getUserInfo = async (req: Request, res: Response): Promise<any> => {
     const { table } = req.params;
     const userId = req.user?.id;
-    console.log(userId);
-
 
     try {
         const include = table === 'employee'
             ? {
                 company: {
                     include: { company: true }
-                }, employeeTasks: {
+                }, tasks: {
                     include: { task: true }
                 }, expenses: {
                     include: { expense: true }
@@ -58,6 +56,7 @@ const getUserInfo = async (req: Request, res: Response): Promise<any> => {
 
         res.status(200).json({ [table]: user });
     } catch (error: any) {
+        console.log(error);
 
         res.status(error.statuss).json({ error: error.message });
     }
