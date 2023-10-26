@@ -16,7 +16,8 @@ const companyInfo = async (req: Request, res: Response): Promise<any> => {
             },
             tasks: { include: { task: true } },
             expenses: { include: { expense: true } },
-            loans: { include: { loan: true } }
+            loans: { include: { loan: true } },
+            notify: true
         });
 
         if (company.ceos.length)

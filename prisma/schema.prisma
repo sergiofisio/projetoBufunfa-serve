@@ -8,76 +8,91 @@ datasource db {
 }
 
 model company {
-  id               Int        @id @default(autoincrement())
+  id               Int                @id @default(autoincrement())
   name             String
   slogan           String?
   description      String?
-  cnpj             String     @unique
+  cnpj             String             @unique
   logo             String?
   background       String?
-  salary           Int?       @default(0)
+  salary           Int?               @default(0)
   ceos             companyCeos[]
   companyEmployees companyEmployees[]
   tasks            companyTasks[]
   expenses         companyExpenses[]
   loans            companyLoans[]
+  notify           notify[]
 }
 
-model companyCeos{
-  id  Int @id @default(autoincrement())
-  ceoId Int?
-  ceo ceo? @relation(fields: [ceoId], references: [id])
+model notify {
+  id              Int       @id @default(autoincrement())
+  table           String
+  tableId         Int
+  companyId       Int
+  company         company?  @relation(fields: [companyId], references: [id])
+  employeeId      Int
+  employee        employee? @relation(fields: [employeeId], references: [id])
+  seen            Boolean   @default(false)
+}
+
+model companyCeos {
+  id        Int      @id @default(autoincrement())
+  ceoId     Int?
+  ceo       ceo?     @relation(fields: [ceoId], references: [id])
   companyId Int?
-  company company? @relation(fields: [companyId], references: [id])
+  company   company? @relation(fields: [companyId], references: [id])
 }
 
-model companyEmployees{
-  id  Int @id @default(autoincrement())
+model companyEmployees {
+  id         Int       @id @default(autoincrement())
   employeeId Int?
-  employee employee? @relation(fields: [employeeId], references: [id])
-  companyId Int?
-  company company? @relation(fields: [companyId], references: [id])
-  salary    Int @default(0)
+  employee   employee? @relation(fields: [employeeId], references: [id])
+  companyId  Int?
+  company    company?  @relation(fields: [companyId], references: [id])
+  salary     Int       @default(0)
 }
-model companyTasks{
-  id  Int @id @default(autoincrement())
-  taskId Int?
-  task task? @relation(fields: [taskId], references: [id])
+
+model companyTasks {
+  id        Int      @id @default(autoincrement())
+  taskId    Int?
+  task      task?    @relation(fields: [taskId], references: [id])
   companyId Int?
-  company company? @relation(fields: [companyId], references: [id])
+  company   company? @relation(fields: [companyId], references: [id])
 }
-model companyExpenses{
-  id  Int @id @default(autoincrement())
+
+model companyExpenses {
+  id        Int      @id @default(autoincrement())
   expenseId Int?
-  expense expense? @relation(fields: [expenseId], references: [id])
+  expense   expense? @relation(fields: [expenseId], references: [id])
   companyId Int?
-  company company? @relation(fields: [companyId], references: [id])
+  company   company? @relation(fields: [companyId], references: [id])
 }
-model companyLoans{
-  id  Int @id @default(autoincrement())
-  loanId Int?
-  loan loan? @relation(fields: [loanId], references: [id])
+
+model companyLoans {
+  id        Int      @id @default(autoincrement())
+  loanId    Int?
+  loan      loan?    @relation(fields: [loanId], references: [id])
   companyId Int?
-  company company? @relation(fields: [companyId], references: [id])
+  company   company? @relation(fields: [companyId], references: [id])
 }
 
 model ceo {
-  id               Int      @id @default(autoincrement())
+  id               Int           @id @default(autoincrement())
   name             String
-  email            String   @unique
-  cpf              String   @unique
+  email            String        @unique
+  cpf              String        @unique
   photo            String?
   password         String
   recoveryPassword String?
   companies        companyCeos[]
-  type             String?   @default("ceo")
+  type             String?       @default("ceo")
 }
 
 model employee {
-  id               Int             @id @default(autoincrement())
+  id               Int                @id @default(autoincrement())
   name             String
-  email            String          @unique
-  cpf              String          @unique
+  email            String             @unique
+  cpf              String             @unique
   photo            String?
   password         String
   recoveryPassword String?
@@ -85,7 +100,8 @@ model employee {
   tasks            employeeTasks[]
   expenses         employeeExpenses[]
   loans            employeeLoans[]
-  type             String?          @default("employee")
+  notify           notify[]
+  type             String?            @default("employee")
 }
 
 model task {
@@ -98,63 +114,63 @@ model task {
 }
 
 model employeeTasks {
-  id         Int       @id @default(autoincrement())
-  employeeId Int?
-  employee   employee? @relation(fields: [employeeId], references: [id])
-  taskId     Int?
-  task       task?      @relation(fields: [taskId], references: [id])
-  statusTaskId Int     @default(1)
-  statusTask    statusTask      @relation(fields: [statusTaskId], references: [id])
+  id           Int        @id @default(autoincrement())
+  employeeId   Int?
+  employee     employee?  @relation(fields: [employeeId], references: [id])
+  taskId       Int?
+  task         task?      @relation(fields: [taskId], references: [id])
+  statusTaskId Int        @default(1)
+  statusTask   statusTask @relation(fields: [statusTaskId], references: [id])
 }
 
 model statusTask {
-  id     Int    @id @default(autoincrement())
-  status String @unique
+  id     Int             @id @default(autoincrement())
+  status String          @unique
   tasks  employeeTasks[]
 }
 
 model expense {
-  id              Int           @id @default(autoincrement())
-  title           String
-  description     String?
-  value           Int
-  date            String?
-  type            String
-  companyExpenses companyExpenses[]
+  id                Int                @id @default(autoincrement())
+  title             String
+  description       String?
+  value             Int
+  date              String?
+  type              String
+  companyExpenses   companyExpenses[]
   employeeExpensese employeeExpenses[]
 }
 
-model employeeExpenses{
-  id         Int       @id @default(autoincrement())
-  employeeId Int?
-  employee   employee? @relation(fields: [employeeId], references: [id])
-  expenseId  Int
-  expense    expense   @relation(fields: [expenseId], references: [id])
-  statusExpenseId Int     @default(1)
-  statusExpense    statusExpense      @relation(fields: [statusExpenseId], references: [id])
+model employeeExpenses {
+  id              Int           @id @default(autoincrement())
+  employeeId      Int?
+  employee        employee?     @relation(fields: [employeeId], references: [id])
+  expenseId       Int
+  expense         expense       @relation(fields: [expenseId], references: [id])
+  statusExpenseId Int           @default(1)
+  statusExpense   statusExpense @relation(fields: [statusExpenseId], references: [id])
 }
 
 model statusExpense {
-  id       Int       @id @default(autoincrement())
-  status   String    @unique
+  id       Int                @id @default(autoincrement())
+  status   String             @unique
   expenses employeeExpenses[]
 }
 
 model loan {
-  id               Int      @id @default(autoincrement())
-  description      String
-  dueDate          String
-  interestRate     Int
-  value            Int
-  companyLoans     companyLoans[]
-  employeeLoans    employeeLoans[]
+  id            Int             @id @default(autoincrement())
+  description   String
+  dueDate       String
+  interestRate  Int
+  value         Int
+  companyLoans  companyLoans[]
+  employeeLoans employeeLoans[]
 }
 
-model employeeLoans{
+model employeeLoans {
   id         Int       @id @default(autoincrement())
   employeeId Int?
   employee   employee? @relation(fields: [employeeId], references: [id])
   loanId     Int?
-  loan       loan?      @relation(fields: [loanId], references: [id])
-  accepted   Boolean?  
+  loan       loan?     @relation(fields: [loanId], references: [id])
+  accepted   Boolean?
 }

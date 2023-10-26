@@ -6,25 +6,45 @@ const createLoan = async (req: Request, res: Response): Promise<any> => {
     const data = req.body;
     const id = req.user?.id;
 
+
     try {
         const findCompany = await findUnique("company", { id: Number(data.companyId) });
+        console.log({ findCompany });
+
         if (!findCompany) throw new CustomError("Empresa não encontrada", 401);
 
         const findLoan = await findFirst("loan", {
             AND: [
-                { description: { contains: data.description } },
-                { companyId: { equals: data.companyId } }
+                { description: { contains: data.description } }
             ]
         });
+        console.log({ findLoan });
 
-        if (findLoan) throw new CustomError("Emprestimo já existente", 402);
 
-        const loan = await createOrUpdate("loan", data);
+        if (findLoan) {
 
-        await createOrUpdate("employeeLoans", { employeeId: Number(id), loanId: loan.id, companyId: Number(data.companyId) });
+            const findLoanInCompany = await findFirst("companyLoans", {
+                AND: [
+                    { loanId: Number(findLoan.id), companyId: Number(data.companyId) }
+                ]
+            })
+
+            if (findLoanInCompany) throw new CustomError("Emprestimo já existente", 402);
+        }
+
+        const loan = await createOrUpdate("loan", { description: data.description, interestRate: Number(data.interestRate), value: data.value, dueDate: String(data.dueDate) });
+        console.log({ loan });
+
+
+        await createOrUpdate("employeeLoans", { employeeId: Number(id), loanId: loan.id });
+
+        await createOrUpdate("companyLoans", { companyId: Number(data.companyId), loanId: loan.id });
+
+        await createOrUpdate("notify", { table: 'loan', tableId: loan.id, companyId: Number(data.companyId), employeeId: Number(id) });
 
         res.status(201).json({ mensagem: "Emprestimo criado com sucesso" });
     } catch (error: any) {
+        console.log(error);
 
         return res.status(error.status).json({ error: error.message });
     }

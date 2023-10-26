@@ -42,6 +42,27 @@ const takeTask = async (req: Request, res: Response): Promise<any> => {
     }
 }
 
+const updateEmployeeTask = async (req: Request, res: Response): Promise<any> => {
+    const { taskId, statusId } = req.params;
+    const id = req.user?.id;
+
+    try {
+
+        const taskInTasks = await findFirst('employeeTasks', { employeeId: Number(id), taskId: Number(taskId) });
+
+        if (!taskInTasks) throw new CustomError("Tarefa não cadastrada para este Funcionario", 401);
+
+        await createOrUpdate('employeeTasks', { statusTaskId: statusId }, taskInTasks.id);
+
+        res.status(200).json({ mensagem: "Tarefa atualizada com sucesso" });
+
+    } catch (error: any) {
+        console.log(error);
+
+        return res.status(error.status).json({ error: error.message });
+    }
+}
+
 const deleteTaskEmployee = async (req: Request, res: Response): Promise<any> => {
     const { taskId } = req.params;
 
@@ -63,4 +84,4 @@ const deleteTaskEmployee = async (req: Request, res: Response): Promise<any> => 
     }
 }
 
-module.exports = { takeTask, deleteTaskEmployee }
+module.exports = { takeTask, updateEmployeeTask, deleteTaskEmployee }
