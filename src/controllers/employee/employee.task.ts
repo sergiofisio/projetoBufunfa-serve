@@ -47,7 +47,6 @@ const updateEmployeeTask = async (req: Request, res: Response): Promise<any> => 
     const id = req.user?.id;
 
     try {
-
         const taskInTasks = await findFirst('employeeTasks', { employeeId: Number(id), taskId: Number(taskId) });
 
         if (!taskInTasks) throw new CustomError("Tarefa não cadastrada para este Funcionario", 401);
