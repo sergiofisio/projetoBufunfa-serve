@@ -9,17 +9,14 @@ const createLoan = async (req: Request, res: Response): Promise<any> => {
 
     try {
         const findCompany = await findUnique("company", { id: Number(data.companyId) });
-        console.log({ findCompany });
 
         if (!findCompany) throw new CustomError("Empresa não encontrada", 401);
 
         const findLoan = await findFirst("loan", {
             AND: [
-                { description: { contains: data.description } }
+                { description: { contains: data.description + " - " + id } }
             ]
         });
-        console.log({ findLoan });
-
 
         if (findLoan) {
 
@@ -29,12 +26,16 @@ const createLoan = async (req: Request, res: Response): Promise<any> => {
                 ]
             })
 
-            if (findLoanInCompany) throw new CustomError("Emprestimo já existente", 402);
+            const findLoanInEmployee = await findFirst("employeeLoans", {
+                AND: [
+                    { loanId: Number(findLoan.id), employeeId: Number(id) }
+                ]
+            })
+
+            if (findLoanInCompany && findLoanInEmployee) throw new CustomError("Emprestimo já existente", 402);
         }
 
-        const loan = await createOrUpdate("loan", { description: data.description, interestRate: Number(data.interestRate), value: data.value, dueDate: String(data.dueDate) });
-        console.log({ loan });
-
+        const loan = await createOrUpdate("loan", { description: data.description + " - " + id, interestRate: Number(data.interestRate), value: data.value, dueDate: String(data.dueDate) });
 
         await createOrUpdate("employeeLoans", { employeeId: Number(id), loanId: loan.id });
 

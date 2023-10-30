@@ -21,6 +21,7 @@ class includes {
   loans?: boolean | { include: { loan: boolean } }
   notify?: boolean
   where?: any
+  loanId?: number
 }
 
 /**
