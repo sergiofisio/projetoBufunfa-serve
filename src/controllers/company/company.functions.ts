@@ -10,7 +10,7 @@ const getFunctionInfo = async (req: Request, res: Response): Promise<any> => {
 
         if (!info) throw new CustomError(`${companyFunction === 'task' ? 'Tarefa' : companyFunction === 'expense' ? 'Despesa' : 'Emprestimo'} não encontrada`, 400);
 
-        res.status(200).json({ [companyFunction]: info });
+        res.status(200).json({ info: info });
 
     } catch (error: any) {
         console.log(error);
