@@ -1,3 +1,5 @@
+import { Request, Response } from "express";
+
 const { createTask } = require("../controllers/task/task.create");
 const { updateTask } = require("../controllers/task/task.update");
 const { deleteTask } = require("../controllers/task/task.delete");
@@ -24,6 +26,13 @@ const route = require("express").Router();
 const { uploadImg } = require("../controllers/upload");
 const multer = require("../middleware/multer");
 
+route.get('/verifyToken/:table', function (_: Request, res: Response) {
+    try {
+        res.json({ ok: true });
+    } catch (error: any) {
+        res.json({ ok: false })
+    }
+})
 route.get("/userInfo/:table", getUserInfo)
 route.get('/functionInfo/:table/:companyFunction/:id', getFunctionInfo)
 route.get('/allFunctionInfo/:table/:companyFunction', getFunctionAllInfo)
