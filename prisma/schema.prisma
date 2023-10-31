@@ -138,6 +138,7 @@ model expense {
   type              String
   companyExpenses   companyExpenses[]
   employeeExpensese employeeExpenses[]
+  loan              Boolean            @default(false)
 }
 
 model employeeExpenses {
