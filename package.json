@@ -26,7 +26,7 @@
     "start": "node dist/index.js",
     "build": "tsc",
     "prisma": "npm run migrate && npm run generate && npm run push && npm run seed",
-    "migrate": "npx prisma migrate dev",
+    "migrate": "npx prisma migrate deploy",
     "generate": "npx prisma generate",
     "pull": "npx prisma db pull",
     "push": "npx prisma db push",
