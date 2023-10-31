@@ -12,6 +12,10 @@ const acceptLoan = async (req: Request, res: Response): Promise<any> => {
 
         await createOrUpdate("loan", { ...data }, Number(id));
 
+        const expense = await createOrUpdate("expense", { ...data, date: String(data.date), loan: true });
+
+        await createOrUpdate("companyExpenses", { expenseId: expense.id, companyId: Number(data.companyId) });
+
         res.status(201).json({
             mensagem: `Emprestimo ${data.accepted ? "aceito" : "rejeitado"}`
         });
