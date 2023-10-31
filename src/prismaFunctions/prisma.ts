@@ -22,6 +22,7 @@ class includes {
   notify?: boolean
   where?: any
   loanId?: number
+  employeeId?: number
 }
 
 /**
@@ -70,7 +71,6 @@ export async function findMany(table: string, includes?: includes) {
  */
 
 export async function createOrUpdate(table: string, data: any, id?: number | string) {
-
 
   if (id) {
     return await prisma[table].update({
