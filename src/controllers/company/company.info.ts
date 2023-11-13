@@ -26,10 +26,6 @@ const companyInfo = async (req: Request, res: Response): Promise<any> => {
         if (company.companyEmployees.length)
             deleteProperties(company.companyEmployees, [], "employee", ['password', 'recoveryPassword']);
 
-        if (type === "employee") {
-            deleteProperties(company, ['salary', 'cnpj']);
-        }
-
         res.status(200).json({ company });
     } catch (error: any) {
         console.log(error);

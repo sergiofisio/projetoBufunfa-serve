@@ -13,9 +13,9 @@ const getUserInfo = async (req: Request, res: Response): Promise<any> => {
                 company: {
                     include: { company: true }
                 }, tasks: {
-                    include: { task: true }
+                    include: { task: { include: { companyTasks: true } } }
                 }, expenses: {
-                    include: { expense: true }
+                    include: { expense: { include: { companyExpenses: true } } }
                 }, loans: {
                     include: { loan: true }
                 },

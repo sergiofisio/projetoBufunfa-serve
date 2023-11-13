@@ -17,7 +17,6 @@ const verifyToken = (req: Request, res: Response, next: NextFunction): void => {
     try {
         const token = (req.headers["authorization"] as string).split(" ")[1];
 
-
         if (!token) {
             res.status(401).json({ error: "Token não encontrado" });
         } else {

@@ -17,7 +17,7 @@ class includes {
     };
   };
   tasks?: boolean | { include: { task: boolean | { include: { companyTasks: boolean } } } };
-  expenses?: boolean | { include: { expense: boolean } };
+  expenses?: boolean | { include: { expense: boolean | { include: { companyExpenses: boolean } } } };
   loans?: boolean | { include: { loan: boolean } }
   notify?: boolean
   where?: any
@@ -104,9 +104,6 @@ export async function deleteOne(table: string, id: number) {
  * @returns O registro encontrado.
  */
 export async function findFirst(table: string, data: any) {
-
-  console.log(data);
-
 
   const Infos = await prisma[table].findFirst({
     where: data

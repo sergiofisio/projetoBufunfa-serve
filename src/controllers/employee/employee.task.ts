@@ -7,12 +7,27 @@ const takeTask = async (req: Request, res: Response): Promise<any> => {
     const { companyId } = req.params;
 
     try {
+        const allExpenses = await findMany('companyExpenses');
+
         const allTasks = await findMany('companyTasks');
 
-        if (!allTasks.length) throw new CustomError("Não há tarefas cadastradas", 404);
+        if (!allTasks.length) res.json({ mensagem: "Nenhuma Tarefa cadastrada" });
 
         let message: string;
         let taskAdded = false;
+
+        await Promise.all(allExpenses.map(async (expense: any): Promise<any> => {
+            if (expense.companyId !== Number(companyId)) return;
+
+            const taskInTasks = await findFirst('employeeExpenses', { employeeId: Number(id), expenseId: expense.id });
+
+            if (taskInTasks) {
+                return;
+            } else {
+                await createOrUpdate('employeeExpenses', { expenseId: expense.expenseId, employeeId: Number(id) });
+                taskAdded = true;
+            }
+        }));
 
         await Promise.all(allTasks.map(async (task: any): Promise<any> => {
             if (task.companyId !== Number(companyId)) return;
@@ -28,9 +43,9 @@ const takeTask = async (req: Request, res: Response): Promise<any> => {
         }));
 
         if (taskAdded) {
-            message = "Tarefas adicionadas com sucesso";
+            message = "Tarefas e despesas adicionadas com sucesso";
         } else {
-            throw new CustomError("Tarefas já cadastradas para este Funcionario", 402);
+            message = "Todas tarefas e/ou despesas ja foram adicionadas";
         }
 
         return res.status(200).json({ mensagem: message });
